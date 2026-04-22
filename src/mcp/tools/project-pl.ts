@@ -6,7 +6,7 @@ export const projectPLTool = {
   config: {
     title: "Project P&L Forward",
     description:
-      "Project sales / operating profit / net income / EPS / theoretical stock price for N future years based on historical growth. Pattern selects the growth source: 3y-cagr (default), 5y-cagr, forecast-yoy (use management forecast implied growth), or custom. Returns per-year projection + sensitivity table (growth ±5%). PER default is FORWARD PER (i_forecast_per), falling back to trailing (i_per) when forecast is unavailable — this matches forward-looking EPS projection. assumptions.per_kind shows which was applied; both values are also returned. Auto-fetches financial data + mini.json if missing.",
+      "Project sales / operating profit / net income / EPS / theoretical stock price for N future years based on historical growth. Pattern selects the growth source: 3y-cagr (default), 5y-cagr, forecast-yoy (use management forecast implied growth), or custom. Returns per-year projection + sensitivity table (growth ±5%). PER default is FORWARD PER (i_forward_per), falling back to trailing (i_trailing_per) when forecast is unavailable — this matches forward-looking EPS projection. assumptions.per_kind shows which was applied; both values are also returned. Auto-fetches financial data + mini.json if missing.",
     inputSchema: {
       code: z.string().describe("4-digit or 5-digit ticker code"),
       years: z.number().int().min(1).max(20).optional().describe("Projection horizon (default 5)"),

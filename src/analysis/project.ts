@@ -93,8 +93,8 @@ export async function projectPL(
 
   await ensureMiniLoaded()
   const miniItem = findByCode(display) ?? findByCode(code5)
-  const trailingPer = toNum(miniItem?.i_per)
-  const forwardPer = toNum(miniItem?.i_forecast_per)
+  const trailingPer = toNum(miniItem?.i_trailing_per)
+  const forwardPer = toNum(miniItem?.i_forward_per)
   const currentPer =
     opts.perOverride ??
     forwardPer ??
@@ -184,9 +184,9 @@ export async function projectPL(
         opts.perOverride !== undefined
           ? "override"
           : forwardPer !== null && currentPer === forwardPer
-          ? "forward (i_forecast_per)"
+          ? "forward (i_forward_per)"
           : trailingPer !== null && currentPer === trailingPer
-          ? "trailing (i_per)"
+          ? "trailing (i_trailing_per)"
           : "fallback (15)",
       trailing_per: trailingPer,
       forward_per: forwardPer,

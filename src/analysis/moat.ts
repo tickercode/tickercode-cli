@@ -103,7 +103,7 @@ export async function calculateMoat(codeInput: string): Promise<MoatResult> {
 
   await ensureMiniLoaded()
   const miniItem = findByCode(display) ?? findByCode(code5)
-  const miniRoe = toNum(miniItem?.i_roe)
+  const miniRoe = toNum(miniItem?.i_trailing_roe)
 
   const opRating = rateStability(opStats.stdev, [1, 3, 6, 12])
   const gmRating = rateStability(gmStats.stdev, [1.5, 3, 6, 12])

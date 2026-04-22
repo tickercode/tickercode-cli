@@ -24,19 +24,30 @@ export type StockItem = {
   market_code?: string
   market_capitalization?: number | null
   stock_price?: string | null
-  i_per?: string | null
-  i_forecast_per?: string | null
-  i_forecast_peg?: string | null
+  // trailing / forward 対称スキーマ (2026-04-22 rename)
+  i_trailing_per?: string | null
+  i_forward_per?: string | null
+  i_forward_peg?: string | null
+  i_trailing_eps?: string | null
+  i_forward_eps?: string | null
+  i_trailing_roe?: string | null
+  i_forward_roe?: string | null
+  i_trailing_roa?: string | null
+  i_forward_roa?: string | null
+  i_trailing_psr?: string | null
+  i_forward_psr?: string | null
+  i_trailing_dividend_yield?: string | null
+  i_forward_dividend_yield?: string | null
+  i_trailing_operating_margin?: string | null
+  i_forward_operating_margin?: string | null
+  i_trailing_net_margin?: string | null
+  i_forward_net_margin?: string | null
+  i_trailing_payout_ratio?: string | null
+  i_forward_payout_ratio?: string | null
+  // prefix なし据え置き (forward 版が存在しない)
   i_pbr?: string | null
-  i_psr?: string | null
-  i_roe?: string | null
-  i_roa?: string | null
   i_roic?: string | null
-  i_dividend_yield?: string | null
-  i_forecast_dividend_yield?: string | null
   i_gross_margin?: string | null
-  i_operating_margin?: string | null
-  i_net_margin?: string | null
   i_equity_ratio?: string | null
   i_ocf_yield?: string | null
   i_fcf_yield?: string | null

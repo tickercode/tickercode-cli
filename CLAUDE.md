@@ -24,6 +24,23 @@
 ### 生データを読みたい時
 raw の edinet / news / financial が必要なら `memory_path(code, "edinet")` で path を取得し **Read ツール**で読む（context に流さない）。`cat | jq` で特定フィールドを抽出してもよい。
 
+### ⚠️ スキーマ命名規約 (重要: 構造的 2 択認識)
+
+API の ratio フィールドは `i_trailing_*` (実績) / `i_forward_*` (予想) の完全対称命名。
+
+- **Rule 1**: `i_trailing_*` を見たら必ず `i_forward_*` が対で存在する (peg 除く)。逆も同様。
+- **Rule 2**: `i_forward_roe` / `i_forward_roa` は hybrid (forecast 純利益 ÷ trailing 自己資本/総資産)。分母が trailing であることを分析に明記する。
+- **Rule 3**: `i_*` (prefix なし) は forward 版が存在しない: `i_pbr` / `i_gross_margin` / `i_roic` / `i_ev_ebitda` / `i_equity_ratio` / `i_ocf_yield` / `i_fcf_yield` / `i_ebitda` / `i_bps` / `i_kiyohara_net_cash_ratio`。ユーザーが「予想 PBR は？」と聞いても「データなし」と返答する (推定計算しない)。
+
+tool 既定値:
+- `project_pl` の PER → `i_forward_per` (将来 EPS に掛けるので forward が整合)
+- `get_stock` → trailing/forward 両方返却、Agent が文脈で判断
+- `get_financial_summary` → forecast セクションで forward
+
+### 破壊的変更
+
+- **2026-04-22 スキーマ rename** (`i_*` / `i_forecast_*` → `i_trailing_*` / `i_forward_*`): 既存 cache は自動破棄不要 (次回 fetch で上書き)。明示的に `tc memory clean --all` でクリーンしてもよい。
+
 ### 基本フロー
 1. `fetch_stock(code)` で必ず一度 memory に保存（TTL 内なら skip される）
 2. 質問内容に応じて summary / trend / project / moat / peers を並列で呼ぶ
