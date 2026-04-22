@@ -1,0 +1,128 @@
+# @tickercode/cli — プロジェクトルール
+
+`@tickercode/cli` は公開 npm CLI。ticker-code.com のデータを人間と Agent（Claude / MCP）から同じ形で叩けるようにする。
+
+## Agent 向け: 銘柄分析のための道具立て
+
+**ユーザーから銘柄（コード）についての自由な質問が来たら、以下の MCP tools を組み合わせて応える。** 固定 workflow はない。`.claude/skills/tc-research/SKILL.md` に質問パターン別の組み立て例あり（参照推奨）。
+
+### MCP tools（namespace: `mcp__tickercode__*`）
+
+| tool | 用途 |
+|------|------|
+| `fetch_stock(code, endpoints?)` | データ取得 → `~/.tickercode/memory/code/{code}/` に保存 |
+| `get_stock(code)` | 銘柄 overview サマリ（~1KB） |
+| `get_financial_summary(code)` | 最新期 + 前年 + YoY + forecast（~1KB） |
+| `get_financial_trend(code, metric, periods)` | 時系列 + CAGR（~500B） |
+| `project_pl(code, years, pattern)` | N 年 PL 予測 + 理論株価 + 感度 |
+| `calculate_moat(code)` | 堀 1〜5 段階 + 4 要素スコア |
+| `find_peers(code, limit?, by?)` | 同セクター peer + 中央値ベンチ |
+| `memory_path(code, endpoint?)` | ファイル絶対パス → Read ツールで raw を読む |
+| `memory_list()` | キャッシュ済み銘柄一覧 |
+| `normalize_code(code)` | 4↔5 桁変換 |
+
+### 生データを読みたい時
+raw の edinet / news / financial が必要なら `memory_path(code, "edinet")` で path を取得し **Read ツール**で読む（context に流さない）。`cat | jq` で特定フィールドを抽出してもよい。
+
+### 基本フロー
+1. `fetch_stock(code)` で必ず一度 memory に保存（TTL 内なら skip される）
+2. 質問内容に応じて summary / trend / project / moat / peers を並列で呼ぶ
+3. 定性が必要なら edinet / news を Read
+4. 出力は `research/code/{4桁}/{date}-{topic}.md` にファイル保存 + 会話にサマリ
+
+詳細は `.claude/skills/tc-research/SKILL.md` 参照。
+
+## 基本方針
+
+- 日本語で回答
+- 計画 → 許可 → 実行 → 報告 の手順
+- class 禁止、関数ベース
+- TypeScript strict
+- `AskUserQuestion` ツールは使用禁止（番号選択形式で代替）
+
+## コマンド命名規約
+
+```
+tc <noun> <code> [--format <pretty|json|md>]
+```
+
+- `<noun>` は **単数形**（`stock` / `financial` / `report`、複数形は `reports` のみ一覧系）
+- `<code>` は 4 桁 or 5 桁の銘柄コード。クォート推奨（`"2418"`）
+- 4 桁入力は内部で 5 桁に正規化（末尾 "0"）
+- 出力モードは `--format` (`-f`)：`pretty`（既定）/ `json` / `md`
+
+## 出力設計
+
+- `pretty` — 人間向け table + 色（cli-table3 + picocolors）
+- `json` — Agent / パイプ向け raw JSON（`process.stdout.write(JSON.stringify(data, null, 2))`）
+- `md` — レポート貼付用 Markdown
+
+**API レスポンスの ApiResponse<T> ラッパー（`{ success, data }`）は `unwrap()` で data 部を抽出**してから整形する。
+
+## ディレクトリ構成
+
+```
+src/
+├── cli.ts               # citty エントリ
+├── commands/            # サブコマンド 1 ファイル 1 コマンド
+├── lib/
+│   ├── api-client.ts    # fetch ラッパー
+│   ├── code.ts          # 4→5 桁正規化
+│   └── format/          # pretty / json / md
+└── mcp/                 # Phase 2: MCP サーバー
+tests/                   # vitest
+docs/                    # 設計ドキュメント
+dist/                    # tsup ビルド成果物（.gitignore）
+```
+
+## API 呼び出し規約
+
+- 原則 **POST** メソッド（ticker-code-api の規約）
+- ベース URL は `TICKERCODE_API_BASE` 環境変数で上書き可
+- 認証: `TICKERCODE_API_KEY` があれば `Authorization: Bearer` を付与
+
+## 銘柄コードの扱い（重要）
+
+- 入力: 4 桁 or 5 桁文字列（`"2418"` / `"24180"`）
+- API 呼び出し: **必ず 5 桁に正規化**（`normalizeCode()` 経由）
+- 表示: ユーザーに見せるときは 4 桁（`displayCode()`）
+
+## テスト
+
+- **vitest**（bun test ではなく）— ESM / tsup との相性
+- ユニットテストは `tests/` 配下
+- API を叩くテストは `tests/integration/` に隔離（CI では skip 可）
+
+## Git / Repo
+
+- GitHub Org: `tickercode`
+- Repo 名: `tickercode/cli`
+- 初期は **Private**、npm publish のタイミングで Public + MIT
+- 独立 Git リポジトリ（api / web と同様）
+
+## 依存パッケージ（最小）
+
+- `citty` — CLI parser（サブコマンド + 型補完）
+- `cli-table3` — pretty table
+- `picocolors` — 軽量色付け（chalk より軽い）
+
+**追加依存を入れる前に必要性を精査する。** lodash や moment は禁止。
+
+## Bun / Node 両対応
+
+- 開発: `bun run dev <command>` で src を直接実行
+- ビルド: `tsup` で ESM + CJS を dist に出力
+- 配布: Node.js ≥ 20 互換（npm install で動く）
+- CI: Node 20/22 matrix + Bun
+
+## 進捗・Phase 管理
+
+詳細は `docs/plan.md` 参照。MVP は **`tc stock` + `tc financial` の 2 コマンド**。Phase 1 以降で `search` / `screen` / `reports` / `mcp` を追加。
+
+## してはいけないこと
+
+- ❌ `class` を使う
+- ❌ `lodash` / `moment` / `axios` を足す（fetch / pico で足りる）
+- ❌ tickercode-analyst のレポート生成ロジックを cli に持ち込む（analyst は別プロジェクト）
+- ❌ 売買・注文執行関連のコマンド（CLI は読み取り専用）
+- ❌ API キー / token を stdout に出す（ログにも残さない）

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tickercode": {
+      "command": "node",
+      "args": ["./dist/cli.mjs", "mcp"]
+    }
+  }
+}

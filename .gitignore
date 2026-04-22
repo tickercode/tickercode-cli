@@ -1,0 +1,17 @@
+node_modules
+dist
+*.log
+.DS_Store
+.env
+.env.local
+coverage
+.vitest-cache
+
+# OMC ランタイム状態（ローカル固有）
+.omc/
+
+# research/ 配下は個別コンテンツをコミットしない（構造と README のみ残す）
+research/**/*
+!research/**/
+!research/**/.gitkeep
+!research/README.md
