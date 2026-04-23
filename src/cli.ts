@@ -3,6 +3,8 @@ import { stockCommand } from "./commands/stock"
 import { financialCommand } from "./commands/financial"
 import { mcpCommand } from "./commands/mcp"
 import { memoryCommand } from "./commands/memory"
+import { screenCommand } from "./commands/screen"
+import { rankCommand } from "./commands/rank"
 
 const VERSION = "0.0.1"
 
@@ -15,6 +17,8 @@ const main = defineCommand({
   subCommands: {
     stock: stockCommand,
     financial: financialCommand,
+    screen: screenCommand,
+    rank: rankCommand,
     mcp: mcpCommand,
     memory: memoryCommand,
   },

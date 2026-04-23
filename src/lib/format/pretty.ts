@@ -37,6 +37,28 @@ export function formatPrettyStock(data: unknown): string {
   return kvTable(obj, title)
 }
 
+export function formatPrettyStockList(
+  items: Record<string, unknown>[],
+  columns: string[],
+  title?: string,
+): string {
+  if (items.length === 0) {
+    return pc.yellow("No matches.")
+  }
+  const cols = columns.length > 0 ? columns : ["display_code", "company_name"]
+  const table = new Table({
+    head: cols.map((c) => pc.cyan(c)),
+    style: { head: [], border: [] },
+  })
+  for (const item of items) {
+    table.push(cols.map((c) => toCell(item[c])))
+  }
+  const heading = title
+    ? `${pc.bold(pc.white(title))}  ${pc.dim(`(${items.length} rows)`)}\n`
+    : `${pc.dim(`(${items.length} rows)`)}\n`
+  return heading + table.toString()
+}
+
 export function formatPrettyFinancial(data: unknown): string {
   const payload = unwrap(data)
   if (!payload || typeof payload !== "object") {

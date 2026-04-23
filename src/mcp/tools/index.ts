@@ -8,6 +8,8 @@ import { getFinancialTrendTool } from "./get-financial-trend"
 import { findPeersTool } from "./find-peers"
 import { projectPLTool } from "./project-pl"
 import { calculateMoatTool } from "./calculate-moat"
+import { screenTool } from "./screen"
+import { rankTool } from "./rank"
 
 export const tools = [
   getStockTool,
@@ -20,4 +22,6 @@ export const tools = [
   findPeersTool,
   projectPLTool,
   calculateMoatTool,
+  screenTool,
+  rankTool,
 ]
