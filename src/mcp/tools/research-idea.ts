@@ -7,7 +7,14 @@ import {
   searchOverview,
   type SearchMatchMode,
 } from "../../lib/overview-search"
-import { buildShortlist, generateSlug } from "../../lib/research-idea"
+import {
+  buildShortlist,
+  generateSlug,
+  fmtKeywordsMd,
+  fmtHitsMd,
+  fmtShortlistMd,
+  fmtFinalMdSkeleton,
+} from "../../lib/research-idea"
 import type {
   FiscalYearStatus,
   SegmentDataStatus,
@@ -24,6 +31,8 @@ type MCPInput = {
   segmentStatusAllow?: SegmentDataStatus[]
   sectorCodes?: string[]
   targetSize?: number
+  hitsLimit?: number
+  topN?: number
   screenConditions?: NumericCondition[]
   includeNull?: boolean
   slug?: string
@@ -50,7 +59,7 @@ export const researchIdeaTool = {
   config: {
     title: "Research Idea (theme → candidates)",
     description:
-      "Orchestrate theme-driven candidate discovery. Given a theme + Agent-generated keywords, run keyword search over overview.json, join with mini.json metrics, apply optional screen filters, cap to target_size, and write 01-keywords.md / 02-hits.md / 03-shortlist.md / final.md (skeleton) + meta.json into research/idea/{slug}/. Returns counts + output path.",
+      "Orchestrate theme-driven candidate discovery. Given a theme + Agent-generated keywords, run keyword search over overview.json, join with mini.json metrics, apply optional screen filters, cap to target_size, and write 01-keywords.md / 02-hits.md / 03-shortlist.md / final.md (skeleton) + hits.json / shortlist.json / meta.json into research/idea/{slug}/. Returns counts + output path.",
     inputSchema: {
       theme: z.string().describe("Free-form investment theme"),
       keywords: z
@@ -68,6 +77,18 @@ export const researchIdeaTool = {
         .optional(),
       sectorCodes: z.array(z.string()).optional(),
       targetSize: z.number().int().positive().optional(),
+      hitsLimit: z
+        .number()
+        .int()
+        .positive()
+        .optional()
+        .describe("Max rows to write in 02-hits.md (default 200). hits.json always has all."),
+      topN: z
+        .number()
+        .int()
+        .positive()
+        .optional()
+        .describe("Number of deep-dive candidates listed in final.md (default 10)"),
       screenConditions: z
         .array(
           z.object({
@@ -92,6 +113,8 @@ export const researchIdeaTool = {
   async handler(input: MCPInput) {
     const matchMode: SearchMatchMode = input.matchMode ?? "any"
     const targetSize = input.targetSize ?? 50
+    const hitsLimit = input.hitsLimit ?? 200
+    const topN = input.topN ?? 10
     const outRoot = resolve(input.out ?? "research/idea")
     const slug = generateSlug({ theme: input.theme, override: input.slug })
     const ideaDir = join(outRoot, slug)
@@ -130,44 +153,70 @@ export const researchIdeaTool = {
     })
 
     const miniByCode = indexMiniByCode(mini.items)
+    const numericConditions = input.screenConditions ?? []
     const shortlist = buildShortlist({
       hits,
       miniByCode,
-      numericConditions: input.screenConditions ?? [],
+      numericConditions,
       includeNull: Boolean(input.includeNull),
       targetSize,
     })
+
+    writeFile(
+      join(ideaDir, "01-keywords.md"),
+      fmtKeywordsMd(input.theme, input.keywords, matchMode),
+    )
+    writeFile(
+      join(ideaDir, "02-hits.md"),
+      fmtHitsMd(input.theme, hits, hitsLimit),
+    )
+    writeFile(
+      join(ideaDir, "hits.json"),
+      JSON.stringify({ count: hits.length, items: hits }, null, 2),
+    )
+    writeFile(
+      join(ideaDir, "03-shortlist.md"),
+      fmtShortlistMd(
+        input.theme,
+        shortlist,
+        numericConditions.map((c) => ({ field: c.field, op: c.op, value: c.value })),
+      ),
+    )
+    writeFile(
+      join(ideaDir, "shortlist.json"),
+      JSON.stringify({ count: shortlist.length, items: shortlist }, null, 2),
+    )
+    writeFile(
+      join(ideaDir, "final.md"),
+      fmtFinalMdSkeleton(
+        input.theme,
+        slug,
+        { hits: hits.length, shortlist: shortlist.length },
+        shortlist,
+        topN,
+      ),
+    )
 
     const manifest = {
       theme: input.theme,
       slug,
       keywords: input.keywords,
       match_mode: matchMode,
-      counts: { hits: hits.length, shortlist: shortlist.length },
-      overview_generated_at: overview.meta?.generated_at ?? null,
-      out_dir: ideaDir,
-      generated_at: new Date().toISOString(),
-    }
-
-    writeFile(join(ideaDir, "meta.json"), JSON.stringify({
-      ...manifest,
-      screen_conditions: input.screenConditions ?? [],
       target_size: targetSize,
+      hits_limit: hitsLimit,
+      top_n: topN,
       include_industry: input.includeIndustry ?? true,
       include_segments: input.includeSegmentNames ?? true,
       fiscal_status_allow: input.fiscalStatusAllow ?? ["current"],
       segment_status_allow: input.segmentStatusAllow ?? "all",
       sector_codes: input.sectorCodes ?? null,
-    }, null, 2))
-
-    writeFile(
-      join(ideaDir, "hits.json"),
-      JSON.stringify({ count: hits.length, items: hits }, null, 2),
-    )
-    writeFile(
-      join(ideaDir, "shortlist.json"),
-      JSON.stringify({ count: shortlist.length, items: shortlist }, null, 2),
-    )
+      screen_conditions: numericConditions,
+      counts: { hits: hits.length, shortlist: shortlist.length },
+      overview_generated_at: overview.meta?.generated_at ?? null,
+      out_dir: ideaDir,
+      generated_at: new Date().toISOString(),
+    }
+    writeFile(join(ideaDir, "meta.json"), JSON.stringify(manifest, null, 2))
 
     return {
       content: [
