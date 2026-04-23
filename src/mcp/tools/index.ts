@@ -12,6 +12,7 @@ import { screenTool } from "./screen"
 import { rankTool } from "./rank"
 import { overviewSearchTool } from "./overview-search"
 import { overviewSyncTool, overviewStatusTool } from "./overview-sync"
+import { researchIdeaTool } from "./research-idea"
 
 export const tools = [
   getStockTool,
@@ -29,4 +30,5 @@ export const tools = [
   overviewSyncTool,
   overviewStatusTool,
   overviewSearchTool,
+  researchIdeaTool,
 ]

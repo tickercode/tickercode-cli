@@ -6,6 +6,7 @@ import { memoryCommand } from "./commands/memory"
 import { screenCommand } from "./commands/screen"
 import { rankCommand } from "./commands/rank"
 import { overviewCommand } from "./commands/overview"
+import { researchIdeaCommand } from "./commands/research-idea"
 
 const VERSION = "0.0.1"
 
@@ -21,6 +22,7 @@ const main = defineCommand({
     screen: screenCommand,
     rank: rankCommand,
     overview: overviewCommand,
+    "research-idea": researchIdeaCommand,
     mcp: mcpCommand,
     memory: memoryCommand,
   },
