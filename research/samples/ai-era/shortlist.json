@@ -1,0 +1,521 @@
+{
+  "count": 20,
+  "items": [
+    {
+      "code": "14350",
+      "display_code": "1435",
+      "company_name": "ｒｏｂｏｔ　ｈｏｍｅ",
+      "sector33_code": "8050",
+      "sector33_code_name": "不動産業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-12-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "partial",
+      "analysis_as_of": "2026-03-05 13:01:47",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry",
+        "strengths",
+        "segments"
+      ],
+      "market_capitalization": 18954416000,
+      "i_forward_per": 9.98,
+      "i_pbr": 1.79,
+      "i_forward_roe": 17.92,
+      "yoy3y_sales": 64.86,
+      "yoy3y_op_profit": 41.58,
+      "stock_price": "208.00"
+    },
+    {
+      "code": "153A0",
+      "display_code": "153A",
+      "company_name": "カウリス",
+      "sector33_code": "5250",
+      "sector33_code_name": "情報･通信業",
+      "market_code_name": "グロース",
+      "fiscal_year": "2025-12-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-03-31 13:01:19",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 10784256000,
+      "i_forward_per": 35.56,
+      "i_pbr": 6.05,
+      "i_forward_roe": 17.02,
+      "yoy3y_sales": 14.29,
+      "yoy3y_op_profit": -0.97,
+      "stock_price": "1652.00"
+    },
+    {
+      "code": "17190",
+      "display_code": "1719",
+      "company_name": "安藤・間",
+      "sector33_code": "2050",
+      "sector33_code_name": "建設業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 01:59:02",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "summary"
+      ],
+      "market_capitalization": 349370910210,
+      "i_forward_per": 10.84,
+      "i_pbr": 1.64,
+      "i_forward_roe": 15.05,
+      "yoy3y_sales": 7.71,
+      "yoy3y_op_profit": 19.28,
+      "stock_price": "1930.50"
+    },
+    {
+      "code": "17230",
+      "display_code": "1723",
+      "company_name": "日本電技",
+      "sector33_code": "2050",
+      "sector33_code_name": "建設業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 00:55:39",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "strengths"
+      ],
+      "market_capitalization": 155359020000,
+      "i_forward_per": 19.67,
+      "i_pbr": 3.58,
+      "i_forward_roe": 18.22,
+      "yoy3y_sales": 10.8,
+      "yoy3y_op_profit": 31.75,
+      "stock_price": "2369.00"
+    },
+    {
+      "code": "18010",
+      "display_code": "1801",
+      "company_name": "大成建設",
+      "sector33_code": "2050",
+      "sector33_code_name": "建設業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 00:30:05",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "summary",
+        "strengths"
+      ],
+      "market_capitalization": 2597103152880,
+      "i_forward_per": 15.51,
+      "i_pbr": 3,
+      "i_forward_roe": 18.51,
+      "yoy3y_sales": 11.98,
+      "yoy3y_op_profit": 86.38,
+      "stock_price": "15915.00"
+    },
+    {
+      "code": "19420",
+      "display_code": "1942",
+      "company_name": "関電工",
+      "sector33_code": "2050",
+      "sector33_code_name": "建設業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 02:06:48",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 1247537230026,
+      "i_forward_per": 20.58,
+      "i_pbr": 3.13,
+      "i_forward_roe": 14.69,
+      "yoy3y_sales": 10.69,
+      "yoy3y_op_profit": 24.79,
+      "stock_price": "6077.00"
+    },
+    {
+      "code": "202A0",
+      "display_code": "202A",
+      "company_name": "豆蔵",
+      "sector33_code": "5250",
+      "sector33_code_name": "情報･通信業",
+      "market_code_name": "グロース",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 02:55:05",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 56817000000,
+      "i_forward_per": 17.72,
+      "i_pbr": 18.06,
+      "i_forward_roe": 101.87,
+      "yoy3y_sales": null,
+      "yoy3y_op_profit": null,
+      "stock_price": "3540.00"
+    },
+    {
+      "code": "208A0",
+      "display_code": "208A",
+      "company_name": "構造計画研究所ホールディングス",
+      "sector33_code": "5250",
+      "sector33_code_name": "情報･通信業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-06-30",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:58:53",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 32197000000,
+      "i_forward_per": 13.54,
+      "i_pbr": 3.1,
+      "i_forward_roe": 22.65,
+      "yoy3y_sales": null,
+      "yoy3y_op_profit": null,
+      "stock_price": "2927.00"
+    },
+    {
+      "code": "21240",
+      "display_code": "2124",
+      "company_name": "ジェイエイシーリクルートメント",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-12-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "partial",
+      "analysis_as_of": "2026-03-05 13:05:32",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 144365878400,
+      "i_forward_per": 16.04,
+      "i_pbr": 6.17,
+      "i_forward_roe": 38.49,
+      "yoy3y_sales": 14.85,
+      "yoy3y_op_profit": 18.6,
+      "stock_price": "872.00"
+    },
+    {
+      "code": "21300",
+      "display_code": "2130",
+      "company_name": "メンバーズ",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:57:05",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry",
+        "weaknesses"
+      ],
+      "market_capitalization": 14616231300,
+      "i_forward_per": 15.2,
+      "i_pbr": 2.44,
+      "i_forward_roe": 15.73,
+      "yoy3y_sales": 8.33,
+      "yoy3y_op_profit": 331.7,
+      "stock_price": "1089.00"
+    },
+    {
+      "code": "21480",
+      "display_code": "2148",
+      "company_name": "アイティメディア",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 00:16:43",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 33845325800,
+      "i_forward_per": 20.59,
+      "i_pbr": 3.75,
+      "i_forward_roe": 18.21,
+      "yoy3y_sales": 0.27,
+      "yoy3y_op_profit": -7.97,
+      "stock_price": "1606.00"
+    },
+    {
+      "code": "21580",
+      "display_code": "2158",
+      "company_name": "ＦＲＯＮＴＥＯ",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "グロース",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:15:19",
+      "matched_keywords": [
+        "AI",
+        "人工知能"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry",
+        "strengths",
+        "weaknesses",
+        "segments"
+      ],
+      "market_capitalization": 31411652514,
+      "i_forward_per": 54.59,
+      "i_pbr": 9.56,
+      "i_forward_roe": 16.64,
+      "yoy3y_sales": -16.36,
+      "yoy3y_op_profit": -216.78,
+      "stock_price": "797.00"
+    },
+    {
+      "code": "21630",
+      "display_code": "2163",
+      "company_name": "アルトナー",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2026-01-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-03-05 13:05:57",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 20299327200,
+      "i_forward_per": 16.59,
+      "i_pbr": 3.96,
+      "i_forward_roe": 23.89,
+      "yoy3y_sales": 9.24,
+      "yoy3y_op_profit": 15.67,
+      "stock_price": "1910.00"
+    },
+    {
+      "code": "21800",
+      "display_code": "2180",
+      "company_name": "サニーサイドアップグループ",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-06-30",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 01:17:15",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 13981792000,
+      "i_forward_per": 10.6,
+      "i_pbr": 2.58,
+      "i_forward_roe": 24.06,
+      "yoy3y_sales": 1.27,
+      "yoy3y_op_profit": 7.35,
+      "stock_price": "920.00"
+    },
+    {
+      "code": "21810",
+      "display_code": "2181",
+      "company_name": "パーソルホールディングス",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "partial",
+      "analysis_as_of": "2026-02-25 03:28:10",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 549103512210,
+      "i_forward_per": 13.11,
+      "i_pbr": 2.58,
+      "i_forward_roe": 18.15,
+      "yoy3y_sales": 5.93,
+      "yoy3y_op_profit": 2.81,
+      "stock_price": "241.60"
+    },
+    {
+      "code": "23010",
+      "display_code": "2301",
+      "company_name": "学情",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-10-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 02:31:52",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 25331680000,
+      "i_forward_per": 9,
+      "i_pbr": 1.6,
+      "i_forward_roe": 17.77,
+      "yoy3y_sales": 18.18,
+      "yoy3y_op_profit": 15.09,
+      "stock_price": "1628.00"
+    },
+    {
+      "code": "23070",
+      "display_code": "2307",
+      "company_name": "クロスキャット",
+      "sector33_code": "5250",
+      "sector33_code_name": "情報･通信業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 02:49:08",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 16478498106,
+      "i_forward_per": 10.35,
+      "i_pbr": 2.17,
+      "i_forward_roe": 21.01,
+      "yoy3y_sales": 10.18,
+      "yoy3y_op_profit": 18.85,
+      "stock_price": "969.00"
+    },
+    {
+      "code": "23170",
+      "display_code": "2317",
+      "company_name": "システナ",
+      "sector33_code": "5250",
+      "sector33_code_name": "情報･通信業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 00:27:10",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 186535440000,
+      "i_forward_per": 15.36,
+      "i_pbr": 4.31,
+      "i_forward_roe": 28.08,
+      "yoy3y_sales": 8.7,
+      "yoy3y_op_profit": 10.34,
+      "stock_price": "438.00"
+    },
+    {
+      "code": "23350",
+      "display_code": "2335",
+      "company_name": "キューブシステム",
+      "sector33_code": "5250",
+      "sector33_code_name": "情報･通信業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 02:41:40",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 16128000000,
+      "i_forward_per": 13.08,
+      "i_pbr": 1.43,
+      "i_forward_roe": 10.92,
+      "yoy3y_sales": 4.54,
+      "yoy3y_op_profit": -0.63,
+      "stock_price": "1024.00"
+    },
+    {
+      "code": "23590",
+      "display_code": "2359",
+      "company_name": "コア",
+      "sector33_code": "5250",
+      "sector33_code_name": "情報･通信業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 00:22:47",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 31701497460,
+      "i_forward_per": 12.94,
+      "i_pbr": 1.63,
+      "i_forward_roe": 12.58,
+      "yoy3y_sales": 4.12,
+      "yoy3y_op_profit": 10.49,
+      "stock_price": "2137.00"
+    }
+  ]
+}

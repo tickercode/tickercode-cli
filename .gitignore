@@ -10,8 +10,9 @@ coverage
 # OMC ランタイム状態（ローカル固有）
 .omc/
 
-# research/ 配下は個別コンテンツをコミットしない（構造と README のみ残す）
+# research/ 配下は個別コンテンツをコミットしない（構造と README、samples のみ残す）
 research/**/*
 !research/**/
 !research/**/.gitkeep
 !research/README.md
+!research/samples/**

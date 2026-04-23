@@ -1,0 +1,42 @@
+{
+  "theme": "AI 時代の受益者",
+  "slug": "ai-20260424-943c988c",
+  "keywords": [
+    "AI",
+    "機械学習",
+    "LLM",
+    "人工知能"
+  ],
+  "match_mode": "any",
+  "include_industry": true,
+  "include_segments": true,
+  "fiscal_status_allow": [
+    "current"
+  ],
+  "segment_status_allow": "all",
+  "sector_codes": null,
+  "target_size": 20,
+  "hits_limit": 30,
+  "top_n": 5,
+  "screen_conditions": [
+    {
+      "field": "i_forward_roe",
+      "op": "gt",
+      "value": 10
+    },
+    {
+      "field": "market_capitalization",
+      "op": "gt",
+      "value": 10000000000
+    }
+  ],
+  "out_dir": "/tmp/research/idea/ai-20260424-943c988c",
+  "generated_at": "2026-04-23T15:33:58.822Z",
+  "counts": {
+    "hits": 563,
+    "shortlist": 20
+  },
+  "data_as_of": {
+    "overview_generated_at": "2026-04-23T13:26:02.772Z"
+  }
+}
