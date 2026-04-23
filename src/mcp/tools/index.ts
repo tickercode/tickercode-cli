@@ -13,6 +13,7 @@ import { rankTool } from "./rank"
 import { overviewSearchTool } from "./overview-search"
 import { overviewSyncTool, overviewStatusTool } from "./overview-sync"
 import { researchIdeaTool } from "./research-idea"
+import { researchBatchTool } from "./research-batch"
 
 export const tools = [
   getStockTool,
@@ -31,4 +32,5 @@ export const tools = [
   overviewStatusTool,
   overviewSearchTool,
   researchIdeaTool,
+  researchBatchTool,
 ]

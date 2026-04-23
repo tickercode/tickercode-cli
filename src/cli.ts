@@ -7,6 +7,7 @@ import { screenCommand } from "./commands/screen"
 import { rankCommand } from "./commands/rank"
 import { overviewCommand } from "./commands/overview"
 import { researchIdeaCommand } from "./commands/research-idea"
+import { researchBatchCommand } from "./commands/research-batch"
 
 const VERSION = "0.0.1"
 
@@ -23,6 +24,7 @@ const main = defineCommand({
     rank: rankCommand,
     overview: overviewCommand,
     "research-idea": researchIdeaCommand,
+    "research-batch": researchBatchCommand,
     mcp: mcpCommand,
     memory: memoryCommand,
   },

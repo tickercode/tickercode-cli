@@ -81,13 +81,31 @@ Phase 2b 完了直後（2026-04-23 commit `78d3fa0`）の dogfood で、`tc rese
 
 ---
 
-### #8 複数テーマ並行実行
+### #8 複数テーマ並行実行 ✅ **実装済 (Phase 2d, 2026-04-24)**
 
 **動機**: `tc research-idea "AI"` と `tc research-idea "半導体"` を同時に走らせたい。
 
-**設計案**: `tc research-batch themes.yaml` のような subcommand か、`tc research-idea` 自体に `--batch file.yaml` flag。`Promise.all` で並行、slug はテーマごとに生成。
+**実装**: `tc research-batch <config.json>` 新規コマンド。
+- `src/lib/research-batch.ts`: zod で config schema、defaults + per-theme override マージ、`runBatch` orchestration、`findOverlaps` クロステーマ重複検出、`fmtBatchSummaryMd` サマリ生成
+- `src/commands/research-batch.ts` / `src/mcp/tools/research-batch.ts`
+- JST batch slug: `batch-YYYYMMDD-HHMM-{hash6}`
+- `Promise.all` 全並列、overview.json / mini.json は 1 度だけ load
+- `tests/research-batch.test.ts`: +23 tests
 
-**工数見積**: 45〜60 分。
+**dogfood 実測 (3 テーマ)**: AI 時代の受益者 (563 hits / 20 shortlist) / 半導体装置 (223/20) / インバウンド (53/18) を並列実行、overlap 2 社検出 (1942 関電工, 2163 アルトナー)。
+
+**Config 例**:
+```json
+{
+  "defaults": { "target_size": 20, "top_n": 5, "screen": { "roe_gt": 10, "mcap_gt": 10000000000 } },
+  "themes": [
+    { "theme": "AI 時代の受益者", "keywords": ["AI","機械学習","LLM"] },
+    { "theme": "半導体装置", "keywords": ["半導体","製造装置"], "screen": { "per_lt": 40 } }
+  ]
+}
+```
+
+**出力**: `research/idea/*/` + `research/batch/{batch-slug}/{config.json, summary.md, manifest.json}`
 
 ---
 

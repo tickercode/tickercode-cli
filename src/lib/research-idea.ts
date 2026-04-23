@@ -1,6 +1,9 @@
 import { createHash } from "node:crypto"
-import type { SearchHit } from "./overview-search"
-import type { StockItem } from "../memory/mini"
+import { dirname, join } from "node:path"
+import { mkdirSync, writeFileSync } from "node:fs"
+import { searchOverview, type SearchHit } from "./overview-search"
+import type { OverviewData, FiscalYearStatus, SegmentDataStatus } from "../memory/overview"
+import type { MiniData, StockItem } from "../memory/mini"
 import { applyFilters, type NumericCondition } from "./screen"
 
 export type ShortlistItem = SearchHit & {
@@ -271,6 +274,174 @@ export function fmtShortlistMd(
     ...rows,
     "",
   ].join("\n")
+}
+
+export function indexMiniByCode(items: StockItem[]): Map<string, StockItem> {
+  const map = new Map<string, StockItem>()
+  for (const s of items) {
+    if (s.display_code) map.set(s.display_code, s)
+    if (s.code) map.set(s.code, s)
+  }
+  return map
+}
+
+export type ThemeRunOptions = {
+  theme: string
+  keywords: string[]
+  matchMode: SearchMatchMode
+  includeIndustry: boolean
+  includeSegmentNames: boolean
+  fiscalStatusAllow: FiscalYearStatus[] | undefined
+  segmentStatusAllow: SegmentDataStatus[] | undefined
+  sectorCodes: string[] | undefined
+  targetSize: number
+  hitsLimit: number
+  topN: number
+  numericConditions: NumericCondition[]
+  includeNull: boolean
+  ideaDir: string
+  slug: string
+}
+
+export type ThemeRunResult = {
+  theme: string
+  slug: string
+  idea_dir: string
+  counts: { hits: number; shortlist: number }
+  top_sector: { sector_code: string; sector_name: string; share: number } | null
+  shortlist_codes: string[]
+  overview_generated_at: string | null
+}
+
+type ThemeRunMeta = {
+  theme: string
+  slug: string
+  keywords: string[]
+  match_mode: SearchMatchMode
+  include_industry: boolean
+  include_segments: boolean
+  fiscal_status_allow: FiscalYearStatus[] | "all"
+  segment_status_allow: SegmentDataStatus[] | "all"
+  sector_codes: string[] | null
+  target_size: number
+  hits_limit: number
+  top_n: number
+  screen_conditions: Array<{ field: string; op: string; value: number }>
+  out_dir: string
+  generated_at: string
+  counts: { hits: number; shortlist: number }
+  data_as_of: { overview_generated_at: string | null }
+}
+
+function writeFileSafe(path: string, content: string) {
+  mkdirSync(dirname(path), { recursive: true })
+  writeFileSync(path, content)
+}
+
+export function runOneTheme(
+  options: ThemeRunOptions,
+  overview: OverviewData,
+  mini: MiniData,
+): ThemeRunResult {
+  mkdirSync(options.ideaDir, { recursive: true })
+
+  const hits = searchOverview(overview.items, {
+    keywords: options.keywords,
+    matchMode: options.matchMode,
+    includeIndustry: options.includeIndustry,
+    includeSegmentNames: options.includeSegmentNames,
+    fiscalStatusAllow: options.fiscalStatusAllow,
+    segmentStatusAllow: options.segmentStatusAllow,
+    sectorCodes: options.sectorCodes,
+  })
+
+  const miniByCode = indexMiniByCode(mini.items)
+  const shortlist = buildShortlist({
+    hits,
+    miniByCode,
+    numericConditions: options.numericConditions,
+    includeNull: options.includeNull,
+    targetSize: options.targetSize,
+  })
+
+  writeFileSafe(
+    join(options.ideaDir, "01-keywords.md"),
+    fmtKeywordsMd(options.theme, options.keywords, options.matchMode),
+  )
+  writeFileSafe(
+    join(options.ideaDir, "02-hits.md"),
+    fmtHitsMd(options.theme, hits, options.hitsLimit),
+  )
+  writeFileSafe(
+    join(options.ideaDir, "hits.json"),
+    JSON.stringify({ count: hits.length, items: hits }, null, 2),
+  )
+  writeFileSafe(
+    join(options.ideaDir, "03-shortlist.md"),
+    fmtShortlistMd(
+      options.theme,
+      shortlist,
+      options.numericConditions.map((c) => ({
+        field: c.field,
+        op: c.op,
+        value: c.value,
+      })),
+    ),
+  )
+  writeFileSafe(
+    join(options.ideaDir, "shortlist.json"),
+    JSON.stringify({ count: shortlist.length, items: shortlist }, null, 2),
+  )
+  writeFileSafe(
+    join(options.ideaDir, "final.md"),
+    fmtFinalMdSkeleton(
+      options.theme,
+      options.slug,
+      { hits: hits.length, shortlist: shortlist.length },
+      shortlist,
+      options.topN,
+    ),
+  )
+
+  const meta: ThemeRunMeta = {
+    theme: options.theme,
+    slug: options.slug,
+    keywords: options.keywords,
+    match_mode: options.matchMode,
+    include_industry: options.includeIndustry,
+    include_segments: options.includeSegmentNames,
+    fiscal_status_allow: options.fiscalStatusAllow ?? "all",
+    segment_status_allow: options.segmentStatusAllow ?? "all",
+    sector_codes: options.sectorCodes ?? null,
+    target_size: options.targetSize,
+    hits_limit: options.hitsLimit,
+    top_n: options.topN,
+    screen_conditions: options.numericConditions.map((c) => ({
+      field: c.field,
+      op: c.op,
+      value: c.value,
+    })),
+    out_dir: options.ideaDir,
+    generated_at: new Date().toISOString(),
+    counts: { hits: hits.length, shortlist: shortlist.length },
+    data_as_of: { overview_generated_at: overview.meta?.generated_at ?? null },
+  }
+  writeFileSafe(join(options.ideaDir, "meta.json"), JSON.stringify(meta, null, 2))
+
+  const breakdown = sectorBreakdown(shortlist)
+  const top = breakdown[0]
+
+  return {
+    theme: options.theme,
+    slug: options.slug,
+    idea_dir: options.ideaDir,
+    counts: { hits: hits.length, shortlist: shortlist.length },
+    top_sector: top
+      ? { sector_code: top.sector_code, sector_name: top.sector_name, share: top.share }
+      : null,
+    shortlist_codes: shortlist.map((s) => s.display_code),
+    overview_generated_at: overview.meta?.generated_at ?? null,
+  }
 }
 
 export function fmtFinalMdSkeleton(
