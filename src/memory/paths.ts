@@ -6,8 +6,12 @@ export const MEMORY_ROOT =
 
 export const MINI_JSON_PATH = join(MEMORY_ROOT, "mini.json")
 export const MINI_META_PATH = join(MEMORY_ROOT, "mini.meta.json")
+export const OVERVIEW_INDEX_PATH = join(MEMORY_ROOT, "overview.json")
+export const OVERVIEW_INDEX_META_PATH = join(MEMORY_ROOT, "overview.meta.json")
 export const INDEX_PATH = join(MEMORY_ROOT, "index.json")
 export const CODE_ROOT = join(MEMORY_ROOT, "code")
+
+export const OVERVIEW_INDEX_TTL_SECONDS = 24 * 3600
 
 export function codeDir(displayCode: string): string {
   return join(CODE_ROOT, displayCode)

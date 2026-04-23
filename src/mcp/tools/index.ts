@@ -10,6 +10,8 @@ import { projectPLTool } from "./project-pl"
 import { calculateMoatTool } from "./calculate-moat"
 import { screenTool } from "./screen"
 import { rankTool } from "./rank"
+import { overviewSearchTool } from "./overview-search"
+import { overviewSyncTool, overviewStatusTool } from "./overview-sync"
 
 export const tools = [
   getStockTool,
@@ -24,4 +26,7 @@ export const tools = [
   calculateMoatTool,
   screenTool,
   rankTool,
+  overviewSyncTool,
+  overviewStatusTool,
+  overviewSearchTool,
 ]

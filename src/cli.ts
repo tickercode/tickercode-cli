@@ -5,6 +5,7 @@ import { mcpCommand } from "./commands/mcp"
 import { memoryCommand } from "./commands/memory"
 import { screenCommand } from "./commands/screen"
 import { rankCommand } from "./commands/rank"
+import { overviewCommand } from "./commands/overview"
 
 const VERSION = "0.0.1"
 
@@ -19,6 +20,7 @@ const main = defineCommand({
     financial: financialCommand,
     screen: screenCommand,
     rank: rankCommand,
+    overview: overviewCommand,
     mcp: mcpCommand,
     memory: memoryCommand,
   },
