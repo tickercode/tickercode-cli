@@ -1,0 +1,647 @@
+{
+  "count": 25,
+  "items": [
+    {
+      "code": "19670",
+      "display_code": "1967",
+      "company_name": "ヤマト",
+      "sector33_code": "2050",
+      "sector33_code_name": "建設業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-20",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 02:22:20",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "summary"
+      ],
+      "market_capitalization": 51391898760,
+      "i_forward_per": 10.97,
+      "i_pbr": 1.16,
+      "i_forward_roe": 10.57,
+      "yoy3y_sales": 6.21,
+      "yoy3y_op_profit": 51.4,
+      "stock_price": "2130.00"
+    },
+    {
+      "code": "22220",
+      "display_code": "2222",
+      "company_name": "寿スピリッツ",
+      "sector33_code": "3050",
+      "sector33_code_name": "食料品",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 05:04:26",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 314585630442,
+      "i_forward_per": 22.95,
+      "i_pbr": 6.89,
+      "i_forward_roe": 30.03,
+      "yoy3y_sales": 32.15,
+      "yoy3y_op_profit": 226.65,
+      "stock_price": "2021.50"
+    },
+    {
+      "code": "23320",
+      "display_code": "2332",
+      "company_name": "クエスト",
+      "sector33_code": "5250",
+      "sector33_code_name": "情報･通信業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 01:17:57",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 9411522120,
+      "i_forward_per": 10.73,
+      "i_pbr": 1.27,
+      "i_forward_roe": 11.83,
+      "yoy3y_sales": 10.73,
+      "yoy3y_op_profit": 6.34,
+      "stock_price": "1715.00"
+    },
+    {
+      "code": "23530",
+      "display_code": "2353",
+      "company_name": "日本駐車場開発",
+      "sector33_code": "8050",
+      "sector33_code_name": "不動産業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-07-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 01:31:18",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 87448048600,
+      "i_forward_per": 15.33,
+      "i_pbr": 4.61,
+      "i_forward_roe": 24.81,
+      "yoy3y_sales": 12.18,
+      "yoy3y_op_profit": 19.35,
+      "stock_price": "251.00"
+    },
+    {
+      "code": "24180",
+      "display_code": "2418",
+      "company_name": "ツカダ・グローバルホールディング",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-12-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-03-16 17:20:47",
+      "matched_keywords": [
+        "インバウンド",
+        "訪日"
+      ],
+      "matched_fields": [
+        "industry",
+        "summary"
+      ],
+      "market_capitalization": 30844800000,
+      "i_forward_per": 5.17,
+      "i_pbr": 0.84,
+      "i_forward_roe": 16.16,
+      "yoy3y_sales": 12.25,
+      "yoy3y_op_profit": 48.98,
+      "stock_price": "630.00"
+    },
+    {
+      "code": "24710",
+      "display_code": "2471",
+      "company_name": "エスプール",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-11-30",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-26 13:06:49",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 19277830000,
+      "i_forward_per": 11.96,
+      "i_pbr": 2.12,
+      "i_forward_roe": 17.75,
+      "yoy3y_sales": 0.32,
+      "yoy3y_op_profit": -2.25,
+      "stock_price": "244.00"
+    },
+    {
+      "code": "24770",
+      "display_code": "2477",
+      "company_name": "手間いらず",
+      "sector33_code": "5250",
+      "sector33_code_name": "情報･通信業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-06-30",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:33:34",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 16442198057,
+      "i_forward_per": 14.49,
+      "i_pbr": 2.42,
+      "i_forward_roe": 16.72,
+      "yoy3y_sales": 10.25,
+      "yoy3y_op_profit": 11.26,
+      "stock_price": "2537.00"
+    },
+    {
+      "code": "250A0",
+      "display_code": "250A",
+      "company_name": "シマダヤ",
+      "sector33_code": "3050",
+      "sector33_code_name": "食料品",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:50:24",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 26290650113,
+      "i_forward_per": 10.44,
+      "i_pbr": 1.36,
+      "i_forward_roe": 13.05,
+      "yoy3y_sales": null,
+      "yoy3y_op_profit": null,
+      "stock_price": "1729.00"
+    },
+    {
+      "code": "27000",
+      "display_code": "2700",
+      "company_name": "木徳神糧",
+      "sector33_code": "6050",
+      "sector33_code_name": "卸売業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-12-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-03-05 13:12:57",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 15934040000,
+      "i_forward_per": 5.48,
+      "i_pbr": 0.8,
+      "i_forward_roe": 14.68,
+      "yoy3y_sales": 20.46,
+      "yoy3y_op_profit": 103.18,
+      "stock_price": "1868.00"
+    },
+    {
+      "code": "27050",
+      "display_code": "2705",
+      "company_name": "大戸屋ホールディングス",
+      "sector33_code": "6100",
+      "sector33_code_name": "小売業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 00:32:51",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 50843100000,
+      "i_forward_per": 48.18,
+      "i_pbr": 13.41,
+      "i_forward_roe": 25.96,
+      "yoy3y_sales": 18.7,
+      "yoy3y_op_profit": 120.89,
+      "stock_price": "7000.00"
+    },
+    {
+      "code": "27080",
+      "display_code": "2708",
+      "company_name": "久世",
+      "sector33_code": "6050",
+      "sector33_code_name": "卸売業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 01:16:35",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry"
+      ],
+      "market_capitalization": 9081479901,
+      "i_forward_per": 6.17,
+      "i_pbr": 1,
+      "i_forward_roe": 16.15,
+      "yoy3y_sales": 16.43,
+      "yoy3y_op_profit": -24.15,
+      "stock_price": "1963.00"
+    },
+    {
+      "code": "28130",
+      "display_code": "2813",
+      "company_name": "和弘食品",
+      "sector33_code": "3050",
+      "sector33_code_name": "食料品",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:37:24",
+      "matched_keywords": [
+        "インバウンド",
+        "訪日"
+      ],
+      "matched_fields": [
+        "summary",
+        "strengths"
+      ],
+      "market_capitalization": 11050073160,
+      "i_forward_per": 8.96,
+      "i_pbr": 0.99,
+      "i_forward_roe": 11.03,
+      "yoy3y_sales": 6.53,
+      "yoy3y_op_profit": 20.01,
+      "stock_price": "3880.00"
+    },
+    {
+      "code": "29810",
+      "display_code": "2981",
+      "company_name": "ランディックス",
+      "sector33_code": "8050",
+      "sector33_code_name": "不動産業",
+      "market_code_name": "グロース",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:53:07",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 12253590174,
+      "i_forward_per": 7.01,
+      "i_pbr": 1.27,
+      "i_forward_roe": 18.18,
+      "yoy3y_sales": 22.45,
+      "yoy3y_op_profit": 22.31,
+      "stock_price": "2159.00"
+    },
+    {
+      "code": "29980",
+      "display_code": "2998",
+      "company_name": "クリアル",
+      "sector33_code": "8050",
+      "sector33_code_name": "不動産業",
+      "market_code_name": "グロース",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:08:45",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 26499102000,
+      "i_forward_per": 15.32,
+      "i_pbr": 2.58,
+      "i_forward_roe": 16.63,
+      "yoy3y_sales": 60.71,
+      "yoy3y_op_profit": 84.91,
+      "stock_price": "735.00"
+    },
+    {
+      "code": "30040",
+      "display_code": "3004",
+      "company_name": "神栄",
+      "sector33_code": "6050",
+      "sector33_code_name": "卸売業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "partial",
+      "analysis_as_of": "2026-02-25 00:23:02",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 9758458500,
+      "i_forward_per": 5.92,
+      "i_pbr": 0.87,
+      "i_forward_roe": 14.67,
+      "yoy3y_sales": 2.17,
+      "yoy3y_op_profit": 32.78,
+      "stock_price": "2341.00"
+    },
+    {
+      "code": "30100",
+      "display_code": "3010",
+      "company_name": "ポラリス・ホールディングス",
+      "sector33_code": "9050",
+      "sector33_code_name": "サービス業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 02:39:20",
+      "matched_keywords": [
+        "訪日"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry",
+        "strengths",
+        "weaknesses"
+      ],
+      "market_capitalization": 41636813040,
+      "i_forward_per": 10.64,
+      "i_pbr": 1.45,
+      "i_forward_roe": 13.6,
+      "yoy3y_sales": 81.64,
+      "yoy3y_op_profit": 37538.75,
+      "stock_price": "178.00"
+    },
+    {
+      "code": "30770",
+      "display_code": "3077",
+      "company_name": "ホリイフードサービス",
+      "sector33_code": "6100",
+      "sector33_code_name": "小売業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-11-30",
+      "fiscal_year_status": "current",
+      "segment_data_status": "partial",
+      "analysis_as_of": "2026-02-25 02:24:33",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 5204430000,
+      "i_forward_per": 12.66,
+      "i_pbr": 4.19,
+      "i_forward_roe": 31.89,
+      "yoy3y_sales": -5.05,
+      "yoy3y_op_profit": 14.6,
+      "stock_price": "751.00"
+    },
+    {
+      "code": "30820",
+      "display_code": "3082",
+      "company_name": "きちりホールディングス",
+      "sector33_code": "6100",
+      "sector33_code_name": "小売業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-06-30",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 00:27:56",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 10894265200,
+      "i_forward_per": 31.16,
+      "i_pbr": 5.08,
+      "i_forward_roe": 15.23,
+      "yoy3y_sales": 31.09,
+      "yoy3y_op_profit": -387.69,
+      "stock_price": "962.00"
+    },
+    {
+      "code": "30970",
+      "display_code": "3097",
+      "company_name": "物語コーポレーション",
+      "sector33_code": "6100",
+      "sector33_code_name": "小売業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-06-30",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 05:21:10",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 167396728870,
+      "i_forward_per": 22.89,
+      "i_pbr": 3.95,
+      "i_forward_roe": 17.21,
+      "yoy3y_sales": 19.23,
+      "yoy3y_op_profit": 59.08,
+      "stock_price": "4270.00"
+    },
+    {
+      "code": "30990",
+      "display_code": "3099",
+      "company_name": "三越伊勢丹ホールディングス",
+      "sector33_code": "6100",
+      "sector33_code_name": "小売業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 04:58:25",
+      "matched_keywords": [
+        "インバウンド",
+        "訪日"
+      ],
+      "matched_fields": [
+        "summary",
+        "strengths",
+        "industry"
+      ],
+      "market_capitalization": 1119525552838,
+      "i_forward_per": 17.05,
+      "i_pbr": 1.88,
+      "i_forward_roe": 10.98,
+      "yoy3y_sales": 10.04,
+      "yoy3y_op_profit": 174.14,
+      "stock_price": "3047.00"
+    },
+    {
+      "code": "31780",
+      "display_code": "3178",
+      "company_name": "チムニー",
+      "sector33_code": "6100",
+      "sector33_code_name": "小売業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 01:42:22",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 23054233600,
+      "i_forward_per": 31.21,
+      "i_pbr": 3.63,
+      "i_forward_roe": 11.66,
+      "yoy3y_sales": 42.99,
+      "yoy3y_op_profit": -90.2,
+      "stock_price": "1192.00"
+    },
+    {
+      "code": "32050",
+      "display_code": "3205",
+      "company_name": "ダイドーリミテッド",
+      "sector33_code": "3100",
+      "sector33_code_name": "繊維製品",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 02:49:51",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 22071068943,
+      "i_forward_per": 17.37,
+      "i_pbr": 2.2,
+      "i_forward_roe": 12.66,
+      "yoy3y_sales": 0.46,
+      "yoy3y_op_profit": -31.21,
+      "stock_price": "719.00"
+    },
+    {
+      "code": "32210",
+      "display_code": "3221",
+      "company_name": "ヨシックスホールディングス",
+      "sector33_code": "6100",
+      "sector33_code_name": "小売業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:10:30",
+      "matched_keywords": [
+        "訪日"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 34502130000,
+      "i_forward_per": 19.27,
+      "i_pbr": 2.71,
+      "i_forward_roe": 14.07,
+      "yoy3y_sales": 43.73,
+      "yoy3y_op_profit": 34.26,
+      "stock_price": "3330.00"
+    },
+    {
+      "code": "32890",
+      "display_code": "3289",
+      "company_name": "東急不動産ホールディングス",
+      "sector33_code": "8050",
+      "sector33_code_name": "不動産業",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 04:16:02",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 976090800744,
+      "i_forward_per": 10.98,
+      "i_pbr": 1.17,
+      "i_forward_roe": 10.65,
+      "yoy3y_sales": 5.21,
+      "yoy3y_op_profit": 19.23,
+      "stock_price": "1356.50"
+    },
+    {
+      "code": "33920",
+      "display_code": "3392",
+      "company_name": "デリカフーズホールディングス",
+      "sector33_code": "6050",
+      "sector33_code_name": "卸売業",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "partial",
+      "analysis_as_of": "2026-02-25 03:45:47",
+      "matched_keywords": [
+        "インバウンド"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 14161780000,
+      "i_forward_per": 10.48,
+      "i_pbr": 1.43,
+      "i_forward_roe": 13.65,
+      "yoy3y_sales": 7.15,
+      "yoy3y_op_profit": 16.52,
+      "stock_price": "865.00"
+    }
+  ]
+}

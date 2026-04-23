@@ -1,0 +1,41 @@
+{
+  "theme": "インバウンド再加速で恩恵を受ける会社",
+  "slug": "theme-20260424-e41dbd50",
+  "keywords": [
+    "インバウンド",
+    "訪日",
+    "観光客"
+  ],
+  "match_mode": "any",
+  "include_industry": true,
+  "include_segments": true,
+  "fiscal_status_allow": [
+    "current"
+  ],
+  "segment_status_allow": "all",
+  "sector_codes": null,
+  "target_size": 25,
+  "hits_limit": 40,
+  "top_n": 5,
+  "screen_conditions": [
+    {
+      "field": "i_forward_roe",
+      "op": "gt",
+      "value": 10
+    },
+    {
+      "field": "market_capitalization",
+      "op": "gt",
+      "value": 5000000000
+    }
+  ],
+  "out_dir": "/tmp/research/idea/theme-20260424-e41dbd50",
+  "generated_at": "2026-04-23T16:10:47.331Z",
+  "counts": {
+    "hits": 223,
+    "shortlist": 25
+  },
+  "data_as_of": {
+    "overview_generated_at": "2026-04-23T13:26:02.772Z"
+  }
+}
