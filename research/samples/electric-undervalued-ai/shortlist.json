@@ -1,0 +1,364 @@
+{
+  "count": 14,
+  "items": [
+    {
+      "code": "65040",
+      "display_code": "6504",
+      "company_name": "富士電機",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 01:06:03",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 1814704925605,
+      "i_forward_per": 19.81,
+      "i_pbr": 2.34,
+      "i_forward_roe": 11.22,
+      "yoy3y_sales": 7.34,
+      "yoy3y_op_profit": 16.34,
+      "stock_price": "12155.00"
+    },
+    {
+      "code": "65940",
+      "display_code": "6594",
+      "company_name": "ニデック",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 00:17:27",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 2857395170656,
+      "i_forward_per": 13,
+      "i_pbr": 1.48,
+      "i_forward_roe": 11.26,
+      "yoy3y_sales": 3.69,
+      "yoy3y_op_profit": 15.49,
+      "stock_price": "2396.00"
+    },
+    {
+      "code": "66320",
+      "display_code": "6632",
+      "company_name": "ＪＶＣケンウッド",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 04:46:36",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry",
+        "segments"
+      ],
+      "market_capitalization": 196964241401,
+      "i_forward_per": 11.79,
+      "i_pbr": 1.3,
+      "i_forward_roe": 10.58,
+      "yoy3y_sales": 9.71,
+      "yoy3y_op_profit": 47.59,
+      "stock_price": "1201.50"
+    },
+    {
+      "code": "67020",
+      "display_code": "6702",
+      "company_name": "富士通",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "partial",
+      "analysis_as_of": "2026-02-25 00:57:45",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 6564183393845,
+      "i_forward_per": 13.09,
+      "i_pbr": 2.78,
+      "i_forward_roe": 21.05,
+      "yoy3y_sales": -0.27,
+      "yoy3y_op_profit": 22.09,
+      "stock_price": "3773.00"
+    },
+    {
+      "code": "67270",
+      "display_code": "6727",
+      "company_name": "ワコム",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 04:06:18",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry"
+      ],
+      "market_capitalization": 101250000000,
+      "i_forward_per": 11.24,
+      "i_pbr": 2.97,
+      "i_forward_roe": 26.4,
+      "yoy3y_sales": 2.13,
+      "yoy3y_op_profit": 70.25,
+      "stock_price": "750.00"
+    },
+    {
+      "code": "67500",
+      "display_code": "6750",
+      "company_name": "エレコム",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:51:42",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 149583143240,
+      "i_forward_per": 7.45,
+      "i_pbr": 1.29,
+      "i_forward_roe": 17.29,
+      "yoy3y_sales": 3.31,
+      "yoy3y_op_profit": -0.04,
+      "stock_price": "1622.00"
+    },
+    {
+      "code": "67530",
+      "display_code": "6753",
+      "company_name": "シャープ",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 01:39:58",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 385043689696,
+      "i_forward_per": 7.55,
+      "i_pbr": 1.56,
+      "i_forward_roe": 19.56,
+      "yoy3y_sales": -4.58,
+      "yoy3y_op_profit": -128.55,
+      "stock_price": "592.60"
+    },
+    {
+      "code": "67580",
+      "display_code": "6758",
+      "company_name": "ソニーグループ",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "partial",
+      "analysis_as_of": "2026-02-25 03:35:21",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry",
+        "segments"
+      ],
+      "market_capitalization": 20066832134635,
+      "i_forward_per": 21.79,
+      "i_pbr": 2.48,
+      "i_forward_roe": 10.92,
+      "yoy3y_sales": 9.55,
+      "yoy3y_op_profit": 5.65,
+      "stock_price": "3263.00"
+    },
+    {
+      "code": "67850",
+      "display_code": "6785",
+      "company_name": "鈴木",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-06-30",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 01:28:18",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 38949497600,
+      "i_forward_per": 12.98,
+      "i_pbr": 1.37,
+      "i_forward_roe": 10.21,
+      "yoy3y_sales": 12.66,
+      "yoy3y_op_profit": 13.61,
+      "stock_price": "2704.00"
+    },
+    {
+      "code": "68550",
+      "display_code": "6855",
+      "company_name": "日本電子材料",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 03:28:27",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "summary",
+        "industry"
+      ],
+      "market_capitalization": 80432338500,
+      "i_forward_per": 19.42,
+      "i_pbr": 2.75,
+      "i_forward_roe": 14.15,
+      "yoy3y_sales": 2.85,
+      "yoy3y_op_profit": 106.29,
+      "stock_price": "6350.00"
+    },
+    {
+      "code": "68620",
+      "display_code": "6862",
+      "company_name": "ミナトホールディングス",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 04:43:28",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 19441776442,
+      "i_forward_per": 8.68,
+      "i_pbr": 2.35,
+      "i_forward_roe": 27.08,
+      "yoy3y_sales": 1.71,
+      "yoy3y_op_profit": 6.01,
+      "stock_price": "2453.00"
+    },
+    {
+      "code": "68740",
+      "display_code": "6874",
+      "company_name": "協立電機",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "スタンダード",
+      "fiscal_year": "2025-06-30",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 02:58:03",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 24065553600,
+      "i_forward_per": 9.1,
+      "i_pbr": 1.07,
+      "i_forward_roe": 11.2,
+      "yoy3y_sales": 10.73,
+      "yoy3y_op_profit": 31.73,
+      "stock_price": "2754.00"
+    },
+    {
+      "code": "69470",
+      "display_code": "6947",
+      "company_name": "図研",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 02:50:33",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry",
+        "strengths"
+      ],
+      "market_capitalization": 98900378780,
+      "i_forward_per": 21.64,
+      "i_pbr": 2.45,
+      "i_forward_roe": 11.31,
+      "yoy3y_sales": 8.97,
+      "yoy3y_op_profit": 11.39,
+      "stock_price": "4445.00"
+    },
+    {
+      "code": "98800",
+      "display_code": "9880",
+      "company_name": "イノテック",
+      "sector33_code": "3650",
+      "sector33_code_name": "電気機器",
+      "market_code_name": "プライム",
+      "fiscal_year": "2025-03-31",
+      "fiscal_year_status": "current",
+      "segment_data_status": "complete",
+      "analysis_as_of": "2026-02-25 04:43:05",
+      "matched_keywords": [
+        "AI"
+      ],
+      "matched_fields": [
+        "industry"
+      ],
+      "market_capitalization": 36072100000,
+      "i_forward_per": 8.69,
+      "i_pbr": 1.46,
+      "i_forward_roe": 16.35,
+      "yoy3y_sales": 4.1,
+      "yoy3y_op_profit": -9.11,
+      "stock_price": "2633.00"
+    }
+  ]
+}

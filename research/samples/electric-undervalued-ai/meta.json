@@ -1,0 +1,52 @@
+{
+  "theme": "電気分野でまだ期待が織り込まれていないAI享受銘柄",
+  "slug": "ai-20260424-b8c7dbeb",
+  "keywords": [
+    "AI",
+    "人工知能"
+  ],
+  "match_mode": "any",
+  "include_industry": true,
+  "include_segments": true,
+  "fiscal_status_allow": [
+    "current"
+  ],
+  "segment_status_allow": "all",
+  "sector_codes": [
+    "3650"
+  ],
+  "target_size": 20,
+  "hits_limit": 30,
+  "top_n": 5,
+  "screen_conditions": [
+    {
+      "field": "i_forward_per",
+      "op": "lt",
+      "value": 25
+    },
+    {
+      "field": "i_pbr",
+      "op": "lt",
+      "value": 3
+    },
+    {
+      "field": "i_forward_roe",
+      "op": "gt",
+      "value": 10
+    },
+    {
+      "field": "market_capitalization",
+      "op": "gt",
+      "value": 5000000000
+    }
+  ],
+  "out_dir": "/tmp/research/idea/ai-20260424-b8c7dbeb",
+  "generated_at": "2026-04-23T23:26:00.440Z",
+  "counts": {
+    "hits": 66,
+    "shortlist": 14
+  },
+  "data_as_of": {
+    "overview_generated_at": "2026-04-23T23:21:52.226Z"
+  }
+}
