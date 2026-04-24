@@ -287,6 +287,116 @@ jq 'sort_by(.g_current_period_end_date)[-8:] | .[] | {
 }' ~/.tickercode/memory/code/<code>/financial.json
 ```
 
+### narrative × edinet 照合パターン（新規、2026-04-24 追加）
+
+**2026-04-24 の CLI 修正で `tc memory fetch` の edinet endpoint が正常動作**。narrative の楽観バイアスを有価証券報告書本文と照合できるようになった。narrative が AI 生成（2026-02〜04）なのに対し、edinet は**企業自身が当局に提出した一次情報**なので、両者の差分から narrative の粉飾 / 漏れを検知できる。
+
+#### edinet.json の構造
+
+```typescript
+{
+  stock_code: string,
+  sections: Array<{
+    section_type: string,  // 下記 15 種
+    section_label: string, // 日本語ラベル（例: "事業等のリスク"）
+    content: string,       // HTML エスケープ済み本文（&lt; &gt; 等のエンティティ込み）
+    doc_id: string,        // EDINET 書類 ID（例: "S100OA6Q"）
+    sec_code: string,      // 5 桁コード
+    word_count: number,
+  }>,
+}
+```
+
+#### 15 種類の section_type と narrative 照合の対応
+
+| section_type | section_label | narrative フィールド | 照合で見るべきもの |
+|---|---|---|---|
+| `business_overview` | 事業の概況 | summary / segments | 事業セグメントの定義 + 構成比の実態 |
+| `management_discussion` | 経営者による分析 (MD&A) | summary / strengths | 直近業績の詳細、成長ドライバーの企業自認識 |
+| `risk_factors` | 事業等のリスク | weaknesses | narrative 未記載の重要リスクの有無 |
+| `research_development` | 研究開発活動 | strengths | AI / 技術系テーマで具体的な R&D 投資先 |
+| `management_policy` | 経営方針 | strengths | 中期経営計画との整合性 |
+| `sustainability` | サステナビリティ | — | ESG テーマの裏取り |
+| `affiliated_entities` | 関係会社 | segments | セグメント構成の企業単位での確認 |
+| `employees` | 従業員 | — | 人的資本、成長を支える人員構成 |
+| `major_facilities` | 主要な設備 | — | AI データセンター / 半導体設備などの物理的実体 |
+| `capital_expenditures` | 設備投資 | — | 成長ストーリーの裏付け（計画通り投資してるか） |
+| `corporate_governance` | コーポレートガバナンス | — | — |
+| `company_history` | 沿革 | — | — |
+| `critical_contracts` | 重要な契約 | — | — |
+| `officers` | 役員 | — | — |
+| `dividend_policy` | 配当政策 | — | — |
+
+#### 照合の実行パターン（4 パターン）
+
+##### パターン 1: リスクの裏取り（narrative の weaknesses が甘くないか）
+
+narrative weaknesses 3-5 項目 vs edinet 「事業等のリスク」全文。edinet の方が包括的で、narrative が触れていない**重要リスク**を捕捉できる。
+
+```bash
+jq '[.sections[] | select(.section_type == "risk_factors")][0] | .content' \
+  ~/.tickercode/memory/code/<code>/edinet.json | \
+  sed 's/&lt;/</g; s/&gt;/>/g; s/&amp;/\&/g' | \
+  sed 's/<[^>]*>//g' | head -100
+```
+
+→ 「narrative で言及されてない経営戦略リスク」「規制リスク」「為替 / 地政学リスク」等を抽出して final.md の懸念セクションに反映。
+
+##### パターン 2: 事業実態の確認（narrative の summary が具体的か）
+
+narrative summary の「〜事業を展開」記述 vs edinet 「事業の概況」。**narrative が Type A と書いているが実態は Type C だった**ケースを検知。
+
+```bash
+jq '[.sections[] | select(.section_type == "business_overview")][0] | .content' \
+  ~/.tickercode/memory/code/<code>/edinet.json | \
+  sed 's/&lt;/</g; s/&gt;/>/g; s/&amp;/\&/g; s/<[^>]*>//g' | head -150
+```
+
+→ 事業の主軸と**テーマキーワードがどれくらい具体的に紐付いているか**を評価。
+
+##### パターン 3: 成長ドライバーの検証（MD&A との照合）
+
+narrative strengths の「〜で成長」記述 vs edinet 「経営者による分析」。企業自身が成長要因をどう認識しているかで narrative の解釈を補正。
+
+```bash
+jq '[.sections[] | select(.section_type == "management_discussion")][0] | .content' \
+  ~/.tickercode/memory/code/<code>/edinet.json | \
+  sed 's/&lt;/</g; s/&gt;/>/g; s/&amp;/\&/g; s/<[^>]*>//g' | head -200
+```
+
+→ 「narrative は楽観的に書いているが、MD&A では具体的な数値目標やタイムラインがない」等のギャップを final.md に記載。
+
+##### パターン 4: R&D 投資の実体（AI / 技術テーマで必須）
+
+narrative strengths の「AI 技術に積極投資」vs edinet 「研究開発活動」。**研究開発費の絶対額と重点領域**を edinet から抽出すれば、narrative の根拠の厚みを評価できる。
+
+```bash
+jq '[.sections[] | select(.section_type == "research_development")][0] | .content' \
+  ~/.tickercode/memory/code/<code>/edinet.json | \
+  sed 's/&lt;/</g; s/&gt;/>/g; s/&amp;/\&/g; s/<[^>]*>//g' | head -150
+```
+
+→ 「narrative は AI データセンター向け水冷モジュールを強調しているが、edinet の R&D では既存モーター改良が中心だった」等のギャップを final.md に記載。
+
+#### 実戦 tips
+
+- **content は HTML エスケープ済み**（`&lt;` `&gt;` `&amp;` 等）。sed で復元してから `<tag>` も sed で除去する 2 段階が最短
+- **section_type で filter → head で先頭 100-200 行**で十分。多くの edinet は 1 section で 10-50KB あるため、全文を context に流すと浪費
+- **AI テーマでは risk_factors + research_development が最有益**。構造改革テーマでは risk_factors + management_discussion、バリューテーマでは management_discussion + capital_expenditures
+- **edinet は空セクションもある**（`word_count: 0`）。`select(.content | length > 0)` で絞ると無駄が減る
+
+#### Step 3 チェックリスト（2026-04-24 更新）
+
+再ランキング時に以下を**全部**確認:
+
+- [ ] `matched_fields` 数で 1 次ランキング
+- [ ] セグメント名にキーワード入っているか
+- [ ] trailing / forward ROE 乖離が 20 ポイント以上ないか
+- [ ] trailing が赤字なのに forward が黒字予想の銘柄は慎重解釈
+- [ ] 市場認識と matched_fields のギャップ
+- [ ] **top 5 候補のうち matched_fields 3 以下の銘柄は edinet risk_factors と照合**（新規、narrative の粉飾検知）
+- [ ] **テーマ純度判定に迷う銘柄は edinet business_overview で事業実態を確認**（新規）
+
 ### なぜ narrative が楽観的になるのか
 
 - overview.json の narrative は AI 生成（2026-02〜04 時点）
