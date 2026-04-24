@@ -122,6 +122,15 @@ const searchCmd = defineCommand({
       default: "any",
     },
     sector: { type: "string", description: "sector33_code filter (comma list OK)" },
+    "require-ai-analysis": {
+      type: "boolean",
+      description: "Only include stocks with AI-generated segment analysis/insights",
+    },
+    "min-revenue-yoy": {
+      type: "string",
+      description:
+        "Filter by dominant segment revenue_yoy (0-1 scale, e.g. '0.1' = 10% growth)",
+    },
     limit: { type: "string", description: "Max hits (default no limit)" },
     columns: {
       type: "string",
@@ -165,6 +174,10 @@ const searchCmd = defineCommand({
       : undefined
 
     const limit = args.limit ? Number.parseInt(String(args.limit), 10) : undefined
+    const requireAiAnalysis = Boolean(args["require-ai-analysis"])
+    const minRevenueYoy = args["min-revenue-yoy"]
+      ? Number.parseFloat(String(args["min-revenue-yoy"]))
+      : undefined
 
     const hits = searchOverview(overview.items, {
       keywords,
@@ -175,6 +188,8 @@ const searchCmd = defineCommand({
       segmentStatusAllow,
       sectorCodes,
       limit,
+      requireAiAnalysis,
+      minRevenueYoy,
     })
 
     const format = String(args.format) as Format

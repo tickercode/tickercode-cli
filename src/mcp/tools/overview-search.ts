@@ -49,6 +49,18 @@ export const overviewSearchTool = {
         .array(z.string())
         .optional()
         .describe("sector33_code list to restrict to (e.g. ['5250', '3650'])"),
+      requireAiAnalysis: z
+        .boolean()
+        .optional()
+        .describe(
+          "If true, only include stocks with AI-generated segment analysis/insights (non-null insights or at least one segment.analysis). Useful to bias toward richer context.",
+        ),
+      minRevenueYoy: z
+        .number()
+        .optional()
+        .describe(
+          "Filter by dominant segment revenue YoY growth rate (0-1 scale, 0.1 = 10% growth). Null or below threshold are excluded.",
+        ),
       limit: z
         .number()
         .int()
@@ -65,6 +77,8 @@ export const overviewSearchTool = {
     fiscalStatusAllow?: FiscalYearStatus[]
     segmentStatusAllow?: SegmentDataStatus[]
     sectorCodes?: string[]
+    requireAiAnalysis?: boolean
+    minRevenueYoy?: number
     limit?: number
   }) {
     const overview = await ensureOverviewLoaded()
@@ -76,6 +90,8 @@ export const overviewSearchTool = {
       fiscalStatusAllow: input.fiscalStatusAllow ?? ["current"],
       segmentStatusAllow: input.segmentStatusAllow,
       sectorCodes: input.sectorCodes,
+      requireAiAnalysis: input.requireAiAnalysis,
+      minRevenueYoy: input.minRevenueYoy,
       limit: input.limit,
     })
 

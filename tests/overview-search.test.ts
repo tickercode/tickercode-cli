@@ -246,6 +246,123 @@ describe("searchOverview", () => {
     })
     expect(hits.map((h) => h.display_code)).not.toContain("1111")
   })
+
+  it("requireAiAnalysis=true filters items without insights / segment analysis", () => {
+    // aiCo, semiCo はいずれも insights/analysis が null → 除外
+    const hits = searchOverview(items, {
+      keywords: ["AI"],
+      requireAiAnalysis: true,
+    })
+    expect(hits).toHaveLength(0)
+  })
+
+  it("requireAiAnalysis=true keeps items with insights", () => {
+    const withInsights = makeItem({
+      code: "22220",
+      display_code: "2222",
+      company_name: "Insight Co",
+      narratives: {
+        summary: "AI 活用",
+        industry: "IT",
+        strengths: null,
+        weaknesses: null,
+      },
+      segment: (() => {
+        const seg = buildSegment(RECENT_FY, [
+          { name: "AI", revenue: 100, revenue_share: 1, operating_income: 10, operating_margin: 0.1 },
+        ])
+        if (seg) seg.insights = "主力の AI 事業が堅調。"
+        return seg
+      })(),
+    })
+    const hits = searchOverview([...items, withInsights], {
+      keywords: ["AI"],
+      requireAiAnalysis: true,
+    })
+    expect(hits.map((h) => h.display_code)).toContain("2222")
+  })
+
+  it("requireAiAnalysis=true keeps items with per-segment analysis", () => {
+    const withPerSegAnalysis = makeItem({
+      code: "33330",
+      display_code: "3333",
+      company_name: "PerSeg Co",
+      narratives: {
+        summary: "AI 新興",
+        industry: "IT",
+        strengths: null,
+        weaknesses: null,
+      },
+      segment: (() => {
+        const seg = buildSegment(RECENT_FY, [
+          { name: "AI", revenue: 100, revenue_share: 1, operating_income: 10, operating_margin: 0.1 },
+        ])
+        if (seg) seg.segments[0].analysis = "AI 事業は成長中"
+        return seg
+      })(),
+    })
+    const hits = searchOverview([...items, withPerSegAnalysis], {
+      keywords: ["AI"],
+      requireAiAnalysis: true,
+    })
+    expect(hits.map((h) => h.display_code)).toContain("3333")
+  })
+
+  it("minRevenueYoy filters dominant segment below threshold", () => {
+    const slowGrower = makeItem({
+      code: "44440",
+      display_code: "4444",
+      company_name: "Slow Grow",
+      narratives: {
+        summary: "AI テーマ",
+        industry: "IT",
+        strengths: null,
+        weaknesses: null,
+      },
+      segment: (() => {
+        const seg = buildSegment(RECENT_FY, [
+          { name: "AI", revenue: 100, revenue_share: 1, operating_income: 10, operating_margin: 0.1 },
+        ])
+        if (seg) seg.segments[0].numbers.latest.revenue_yoy = 0.02
+        return seg
+      })(),
+    })
+    const fastGrower = makeItem({
+      code: "55550",
+      display_code: "5555",
+      company_name: "Fast Grow",
+      narratives: {
+        summary: "AI テーマ",
+        industry: "IT",
+        strengths: null,
+        weaknesses: null,
+      },
+      segment: (() => {
+        const seg = buildSegment(RECENT_FY, [
+          { name: "AI", revenue: 100, revenue_share: 1, operating_income: 10, operating_margin: 0.1 },
+        ])
+        if (seg) seg.segments[0].numbers.latest.revenue_yoy = 0.15
+        return seg
+      })(),
+    })
+    const hits = searchOverview([slowGrower, fastGrower], {
+      keywords: ["AI"],
+      minRevenueYoy: 0.1,
+    })
+    const codes = hits.map((h) => h.display_code)
+    expect(codes).toContain("5555")
+    expect(codes).not.toContain("4444")
+  })
+
+  it("minRevenueYoy with null revenue_yoy is excluded", () => {
+    // 全 segment の revenue_yoy が null だと通らない
+    const hits = searchOverview(items, {
+      keywords: ["AI"],
+      minRevenueYoy: 0.05,
+    })
+    // aiCo の revenue_yoy は null → 除外される
+    expect(hits.map((h) => h.display_code)).not.toContain("1234")
+  })
 })
 
 describe("parseKeywordsArg", () => {

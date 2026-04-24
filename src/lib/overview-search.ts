@@ -117,6 +117,8 @@ export function searchOverview(
     sectorCodes,
     caseSensitive = false,
     limit,
+    requireAiAnalysis,
+    minRevenueYoy,
   } = opts
 
   if (keywords.length === 0) return []
@@ -135,6 +137,32 @@ export function searchOverview(
     }
     if (sectorCodes && !sectorCodes.includes(item.sector33_code)) {
       continue
+    }
+
+    // requireAiAnalysis: insights か segments[].analysis に AI 分析がある銘柄のみ通す
+    if (requireAiAnalysis) {
+      const hasInsights =
+        typeof item.segment?.insights === "string" && item.segment.insights.length > 0
+      const hasPerSegment = (item.segment?.segments ?? []).some(
+        (s) => typeof s.analysis === "string" && s.analysis.length > 0,
+      )
+      if (!hasInsights && !hasPerSegment) continue
+    }
+
+    // minRevenueYoy: 主力 segment (revenue_share 最大) の revenue_yoy >= threshold
+    if (minRevenueYoy != null) {
+      const segs = item.segment?.segments ?? []
+      let dominant: (typeof segs)[number] | null = null
+      let maxShare = -Infinity
+      for (const s of segs) {
+        const share = s.numbers.latest.revenue_share
+        if (share != null && share > maxShare) {
+          maxShare = share
+          dominant = s
+        }
+      }
+      const yoy = dominant?.numbers.latest.revenue_yoy
+      if (yoy == null || yoy < minRevenueYoy) continue
     }
 
     const sources = collectFields(item, includeIndustry, includeSegmentNames)
