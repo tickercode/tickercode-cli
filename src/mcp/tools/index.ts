@@ -14,6 +14,7 @@ import { overviewSearchTool } from "./overview-search"
 import { overviewSyncTool, overviewStatusTool } from "./overview-sync"
 import { researchIdeaTool } from "./research-idea"
 import { researchBatchTool } from "./research-batch"
+import { webSearchTool, webFetchTool, webRenderTool } from "./web-search"
 
 export const tools = [
   getStockTool,
@@ -33,4 +34,7 @@ export const tools = [
   overviewSearchTool,
   researchIdeaTool,
   researchBatchTool,
+  webSearchTool,
+  webFetchTool,
+  webRenderTool,
 ]
