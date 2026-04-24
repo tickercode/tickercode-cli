@@ -20,6 +20,16 @@ export type SearchOptions = {
   sectorCodes?: string[]
   caseSensitive?: boolean
   limit?: number
+  /**
+   * true の場合、segment.insights か各 segment.analysis に AI 分析がある銘柄のみ通す。
+   * jsonb 切替後の新機能。
+   */
+  requireAiAnalysis?: boolean
+  /**
+   * 主力 segment（revenue_share 最大）の revenue_yoy が閾値以上の銘柄のみ通す。
+   * 0-1 スケール（0.1 = 10% 成長）。null は除外。
+   */
+  minRevenueYoy?: number
 }
 
 export type SearchHit = {
