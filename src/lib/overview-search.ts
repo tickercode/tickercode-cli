@@ -121,9 +121,12 @@ export function searchOverview(
     minRevenueYoy,
   } = opts
 
-  if (keywords.length === 0) return []
-  const normalizedKeywords = keywords.map((k) => k.trim()).filter(Boolean)
-  if (normalizedKeywords.length === 0) return []
+  if (!keywords || keywords.length === 0) return []
+  const normKws = keywords.map((k) => k.trim()).filter(Boolean)
+  if (!normKws || normKws.length === 0) return []
+  if (!Array.isArray(items)) {
+    throw new Error('searchOverview: items must be an array, got ' + typeof items)
+  }
 
   const hits: SearchHit[] = []
   for (const item of items) {
@@ -170,7 +173,7 @@ export function searchOverview(
 
     const matchedKeywords = new Set<string>()
     const matchedFields = new Set<string>()
-    for (const kw of normalizedKeywords) {
+    for (const kw of normKws) {
       for (const src of sources) {
         if (matches(kw, src.text, caseSensitive)) {
           matchedKeywords.add(kw)
@@ -179,7 +182,8 @@ export function searchOverview(
       }
     }
 
-    if (matchMode === "all" && matchedKeywords.size !== normalizedKeywords.length) {
+    console.error('[debug] at matchMode check, normKws:', normKws, 'size:', matchedKeywords.size)
+    if (matchMode === "all" && matchedKeywords.size !== normKws.length) {
       continue
     }
     if (matchedKeywords.size === 0) continue
