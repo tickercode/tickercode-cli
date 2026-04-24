@@ -17,22 +17,62 @@ export const OVERVIEW_CDN_URL =
   process.env.TICKERCODE_OVERVIEW_URL ??
   "https://cdn.ticker-code.com/cache/api/full/list/overview.json"
 
+// 派生 status 型（BE 側から削除、CLI 側で派生計算する）
 export type FiscalYearStatus = "current" | "stale_2y+" | "missing"
 export type SegmentDataStatus = "complete" | "partial" | "unavailable"
 
 export type OverviewNarratives = {
-  summary: string
-  industry: string
-  strengths: string[]
-  weaknesses: string[]
+  summary: string | null
+  industry: string | null
+  strengths: string[] | null
+  weaknesses: string[] | null
 }
 
-export type OverviewSegment = {
-  name: string
+export type OverviewSegmentNumbersLatest = {
+  fiscal_year: string
   revenue: number | null
-  revenue_share: number | null
-  op_profit: number | null
-  op_margin: number | null
+  revenue_share: number | null          // 0-1 スケール
+  operating_income: number | null
+  operating_margin: number | null       // 0-1 スケール
+  gross_profit: number | null
+  gross_margin: number | null
+  assets: number | null
+  revenue_yoy: number | null             // 0-1 スケール成長率
+  operating_income_yoy: number | null
+  gross_profit_yoy: number | null
+  assets_yoy: number | null
+  revenue_cagr_2y: number | null
+  operating_income_cagr_2y: number | null
+  gross_profit_cagr_2y: number | null
+  assets_cagr_2y: number | null
+}
+
+export type OverviewSegmentNumbersHistory = {
+  fiscal_year: string
+  revenue: number | null
+  operating_income: number | null
+  gross_profit: number | null
+  assets: number | null
+}
+
+export type OverviewSegmentEntry = {
+  name: string
+  normalized_name: string
+  numbers: {
+    latest: OverviewSegmentNumbersLatest
+    history: OverviewSegmentNumbersHistory[]
+  }
+  analysis: string | null
+}
+
+export type OverviewSegmentData = {
+  schema_version: 1
+  fiscal_year: string
+  total_sales: number | null
+  segment_count: number
+  segments: OverviewSegmentEntry[]
+  insights: string | null
+  last_refreshed_at: string
 }
 
 export type OverviewItem = {
@@ -44,12 +84,7 @@ export type OverviewItem = {
   sector33_code_name: string
   market_code_name: string
   narratives: OverviewNarratives | null
-  segments: OverviewSegment[]
-  segment_count: number
-  total_sales: number | null
-  fiscal_year: string | null
-  fiscal_year_status: FiscalYearStatus
-  segment_data_status: SegmentDataStatus
+  segment: OverviewSegmentData | null     // 新: jsonb が丸ごと入る
   analysis_as_of: string | null
 }
 

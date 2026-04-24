@@ -3,6 +3,10 @@ import type {
   OverviewItem,
   SegmentDataStatus,
 } from "../memory/overview"
+import {
+  computeFiscalYearStatus,
+  computeSegmentDataStatus,
+} from "./overview-status"
 
 export type SearchMatchMode = "any" | "all"
 
@@ -42,24 +46,44 @@ function collectFields(
 ): FieldSource[] {
   const out: FieldSource[] = []
   if (item.narratives) {
-    out.push({ field: "summary", text: item.narratives.summary })
-    if (includeIndustry) {
+    if (item.narratives.summary) {
+      out.push({ field: "summary", text: item.narratives.summary })
+    }
+    if (includeIndustry && item.narratives.industry) {
       out.push({ field: "industry", text: item.narratives.industry })
     }
-    out.push({
-      field: "strengths",
-      text: item.narratives.strengths.join(" "),
-    })
-    out.push({
-      field: "weaknesses",
-      text: item.narratives.weaknesses.join(" "),
-    })
+    if (item.narratives.strengths && item.narratives.strengths.length > 0) {
+      out.push({
+        field: "strengths",
+        text: item.narratives.strengths.join(" "),
+      })
+    }
+    if (item.narratives.weaknesses && item.narratives.weaknesses.length > 0) {
+      out.push({
+        field: "weaknesses",
+        text: item.narratives.weaknesses.join(" "),
+      })
+    }
   }
-  if (includeSegmentNames && item.segments.length > 0) {
-    out.push({
-      field: "segments",
-      text: item.segments.map((s) => s.name).join(" "),
-    })
+  const segData = item.segment
+  if (segData) {
+    if (includeSegmentNames && segData.segments.length > 0) {
+      out.push({
+        field: "segments",
+        text: segData.segments.map((s) => s.name).join(" "),
+      })
+    }
+    // AI 分析の散文もキーワード検索対象に加える（新 shape で追加された情報）
+    if (segData.insights) {
+      out.push({ field: "segment_insights", text: segData.insights })
+    }
+    const perSegAnalysis = segData.segments
+      .map((s) => s.analysis ?? "")
+      .filter(Boolean)
+      .join(" ")
+    if (perSegAnalysis) {
+      out.push({ field: "segment_analysis", text: perSegAnalysis })
+    }
   }
   return out
 }
@@ -91,16 +115,12 @@ export function searchOverview(
 
   const hits: SearchHit[] = []
   for (const item of items) {
-    if (
-      fiscalStatusAllow &&
-      !fiscalStatusAllow.includes(item.fiscal_year_status)
-    ) {
+    const fyStatus = computeFiscalYearStatus(item.segment)
+    const segStatus = computeSegmentDataStatus(item.segment)
+    if (fiscalStatusAllow && !fiscalStatusAllow.includes(fyStatus)) {
       continue
     }
-    if (
-      segmentStatusAllow &&
-      !segmentStatusAllow.includes(item.segment_data_status)
-    ) {
+    if (segmentStatusAllow && !segmentStatusAllow.includes(segStatus)) {
       continue
     }
     if (sectorCodes && !sectorCodes.includes(item.sector33_code)) {
@@ -133,9 +153,9 @@ export function searchOverview(
       sector33_code: item.sector33_code,
       sector33_code_name: item.sector33_code_name,
       market_code_name: item.market_code_name,
-      fiscal_year: item.fiscal_year,
-      fiscal_year_status: item.fiscal_year_status,
-      segment_data_status: item.segment_data_status,
+      fiscal_year: item.segment?.fiscal_year ?? null,
+      fiscal_year_status: fyStatus,
+      segment_data_status: segStatus,
       analysis_as_of: item.analysis_as_of,
       matched_keywords: Array.from(matchedKeywords),
       matched_fields: Array.from(matchedFields),
