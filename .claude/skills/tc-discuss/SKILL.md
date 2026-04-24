@@ -299,6 +299,33 @@ Discussion 終了（100 発言）。以下からお選びください:
 | 「同業他社との比較は？」 | `find_peers` |
 | 「事業の核は？」 | narrative 抽出（overview.json の summary） |
 | 「事業リスクは？」（深堀り要求時） | `memory_path` → edinet の `risk_factors` を sed で読む |
+| 「最新のニュースは？」「直近の経営者発言は？」 | **`web_search` + `web_fetch`**（2026-04-24 追加） |
+| 「業界の最新トレンドは？」 | **`web_search`**（業界名 + freshness: "pm"） |
+
+### 外部 Web 検索（2026-04-24 追加）
+
+tickercode のデータ（overview/financial/edinet）は**銘柄単位で正確**だが、narrative が 2026-02〜04 生成で**ラグがある**。直近 1-2 ヶ月のニュース / 経営者発言 / 業界トレンドが議論の核になる時は以下を使う:
+
+- `mcp__tickercode__web_search(query, limit?, freshness?, site?, exclude_sites?)` — Brave API keyword 検索
+- `mcp__tickercode__web_fetch(url, format?, max_length?)` — URL → 本文抽出（SPA は自動 BR fallback）
+- `mcp__tickercode__web_render(url)` — SPA 向けの強制 BR 再取得
+
+#### Discuss モードでの使い所
+
+- **投資家モデルが「最新のデータを見たい」と発言**した時（例: バフェット「直近の決算発表は？」）
+- **反対派が「最近の報道ではこう書いてある」と主張**する場合の裏取り
+- **司会が「MCP で公式データは出た、web で市場認識を補足しよう」と提案**する時
+- 会話中の事実確認（「○○社の最新 IR は？」）
+
+#### Claude 組込 WebSearch との使い分け
+
+まず Claude 組込 WebSearch を試す（無料・速い）。結果が物足りない時に `web_search` MCP（Brave、freshness / site 絞込可）を使う。
+
+#### 料金注意
+
+- Brave API: $5 / 1k queries、Free tier 2k/月
+- 1 session で 5-10 回が目安（100 発言中 5-10 tool calls）
+- 同 query を短時間連打しない
 
 **呼出は宣言なし、結果は発言に織り込む**。例:
 

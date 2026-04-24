@@ -394,8 +394,50 @@ jq '[.sections[] | select(.section_type == "research_development")][0] | .conten
 - [ ] trailing / forward ROE 乖離が 20 ポイント以上ないか
 - [ ] trailing が赤字なのに forward が黒字予想の銘柄は慎重解釈
 - [ ] 市場認識と matched_fields のギャップ
-- [ ] **top 5 候補のうち matched_fields 3 以下の銘柄は edinet risk_factors と照合**（新規、narrative の粉飾検知）
-- [ ] **テーマ純度判定に迷う銘柄は edinet business_overview で事業実態を確認**（新規）
+- [ ] **top 5 候補のうち matched_fields 3 以下の銘柄は edinet risk_factors と照合**（narrative の粉飾検知）
+- [ ] **テーマ純度判定に迷う銘柄は edinet business_overview で事業実態を確認**
+
+### Step 3 補助ツール: web_search (2026-04-24 追加)
+
+narrative は 2026-02〜04 生成で**最大 2 ヶ月のラグ**がある。shortlist top 5 の銘柄について、**直近 1-2 ヶ月の事業動向 / 経営者発言 / メディア報道**を裏取りしたい時は、以下の MCP ツールを使う:
+
+- `mcp__tickercode__web_search` — Brave API で keyword 検索（max 20 件）
+- `mcp__tickercode__web_fetch` — URL の本文抽出（静的 + 失敗時 CF Browser Rendering fallback）
+- `mcp__tickercode__web_render` — SPA 向けの強制 BR 再取得
+
+#### 推奨クエリパターン
+
+```
+web_search("<企業名> <テーマキーワード> 2026", freshness: "pm", site: "ir.<domain>")
+# 例: "ニデック 水冷モジュール 2026" + "ir.nidec.com" で公式 IR ページ限定
+
+web_search("<銘柄コード> 決算 最新", freshness: "pd")
+# 例: "6594 決算" で 24h 以内のニュース
+
+web_search("<業界名> 中国シェア 推移", freshness: "py")
+# 例: "精密小型モータ 中国シェア" で 1 年以内の業界記事
+```
+
+#### 使い所
+
+- narrative と実態の**ギャップ検出**（narrative は楽観、web は悲観な記事がある場合 = 警戒）
+- **事業リスクの追加補強**（edinet だけでは最新の訴訟/事故/規制変更を取れない）
+- **経営者の最新発言**（IR 面談 / インタビュー / 決算説明会の書き起こし）
+- **業界トレンド**（外資アナリスト / メディア / SNS による市場認識）
+
+#### Claude 組込 WebSearch との使い分け
+
+まず Claude 組込の WebSearch を試す（無料・速い）。結果が不十分 or 最新性が足りない時に `web_search` MCP を使う（Brave API、freshness 絞り可、site 限定可）。
+
+#### 料金注意
+
+- Brave API: $5 / 1k queries、Free tier 2k/月
+- 1 銘柄の深堀りで `web_search` 3-5 回、`web_fetch` 3-8 回が目安
+- top 5 全員を web で裏取りすると 20-40 queries 消費 → 月 2k の 1-2% 程度
+
+#### 仕様書
+
+BE の `.claude/shared/api-contract.md`「Web Search」セクション。
 
 ### なぜ narrative が楽観的になるのか
 

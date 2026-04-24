@@ -1,6 +1,6 @@
 ---
 name: tc-research
-description: 日本株の銘柄分析に関するあらゆる質問に答えるための指南書。ユーザーが自由な質問をしてくる前提で、tickercode MCP の 10 ツールを柔軟に組み合わせてレポートを生成する。数値系は MCP で、定性系は edinet/news を Read で読んで narrative に仕立てる。
+description: 日本株の銘柄分析に関するあらゆる質問に答えるための指南書。ユーザーが自由な質問をしてくる前提で、tickercode MCP の 13 ツールを柔軟に組み合わせてレポートを生成する。数値系は MCP で、定性系は edinet/news を Read、narrative 裏取りに web_search / web_fetch / web_render を追加。
 ---
 
 # tc-research — 柔軟な銘柄調査アシスタント
@@ -47,7 +47,7 @@ API は `i_trailing_*` (実績) と `i_forward_*` (予想) の完全対称命名
 | get_stock | 両方返却 | Agent が文脈で判断 |
 | get_financial_summary | forecast セクションで forward | |
 
-## ツールカタログ（10 本）
+## ツールカタログ（13 本: MCP 10 + Web 検索 3）
 
 ### データ取得（まず 1 回呼ぶ）
 
@@ -78,6 +78,50 @@ API は `i_trailing_*` (実績) と `i_forward_*` (予想) の完全対称命名
 |------|------|
 | `mcp__tickercode__normalize_code(code)` | 4↔5 桁変換 |
 | `mcp__tickercode__memory_list()` | キャッシュ済み銘柄一覧 |
+
+### 外部 Web 検索（2026-04-24 追加 / BE 実装済）
+
+Claude Code 組込 WebSearch で情報が足りない / 最新 narrative が取れない時に使う補助ツール。`tc memory fetch` の edinet / disclosure / news は銘柄単位では正常だが、**直近の業界レポート / メディア報道 / 経営者インタビュー / 事業のトレンド解説**は外部 Web 検索が必要。
+
+| tool | 役割 | 使い所 |
+|------|------|-------|
+| `mcp__tickercode__web_search(query, limit?, freshness?, country?, site?, exclude_sites?)` | Brave Search で keyword 検索 → {title, url, snippet}[] | 最新ニュース / 業界トレンド / 経営者発言 |
+| `mcp__tickercode__web_fetch(url, format?, max_length?)` | URL → 静的 fetch + 本文抽出、失敗時 CF Browser Rendering に自動 fallback | 検索 hit の 1 件を読み込む |
+| `mcp__tickercode__web_render(url)` | CF Browser Rendering で強制再取得（SPA 向け） | `web_fetch` が短い / レンダリング失敗時 |
+
+#### 使い分け
+
+1. **まず Claude 組込 WebSearch** を試す（無料・速い）
+2. 結果が不十分なら `web_search` で Brave API（max 20 件、`freshness` で 24h/7d/30d/365d 絞り、`site: ir.nidec.com` 等で IR ページ限定可）
+3. 1 記事を深く読みたければ `web_fetch`（静的 HTML なら速い、SPA なら自動 BR fallback）
+4. `web_fetch` の結果が `content_length < 500` で不足なら `web_render` で強制再取得
+
+#### 典型クエリ例
+
+```
+web_search("ニデック 水冷モジュール 受注 2026", freshness: "pm", site: "ir.nidec.com")
+web_search("6594 決算 永守 後継", freshness: "pm")
+web_search("精密小型モータ 中国シェア", freshness: "py")
+web_search("AI データセンター 日本 部品メーカー", freshness: "pm")
+```
+
+#### 信頼度の見分け方
+
+- **高**: 日経 / 東洋経済 / Bloomberg / 公式 IR / EDINET
+- **中**: 業界メディア / アナリストレポート（有料情報の無料部分）
+- **低**: SNS / 個人ブログ / アフィリエイト系
+
+narrative 裏取りには**高〜中信頼度のソース 2 件以上**を突合させると事実性が上がる。
+
+#### 料金注意
+
+- Brave API: $5 / 1k queries、Free tier 2k/月
+- 同じ query を短時間に連打しない（MVP は cache 未実装、Phase 2 で R2 cache 予定）
+- 1 セッション内で `web_search` は 5-10 回、`web_fetch` は 10-20 回が目安
+
+#### 仕様書
+
+BE の `.claude/shared/api-contract.md` の「Web Search」セクションに詳細。
 
 ### 生データ（Read ツール）
 
