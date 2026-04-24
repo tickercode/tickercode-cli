@@ -33,9 +33,11 @@ export type FetchResult = {
 function bodyFor(endpoint: EndpointName, code5: string): unknown {
   switch (endpoint) {
     case "disclosure":
-      return { code: code5, limit: 20 }
+      return { stock_code: code5, limit: 30 }
     case "news":
-      return { code: code5, limit: 20 }
+      return { stock_code: code5, limit: 20 }
+    case "edinet":
+      return { stock_code: code5 }
     default:
       return { code: code5 }
   }

@@ -29,7 +29,7 @@ export const ENDPOINTS = {
   overview: "/api/full/stock",
   financial: "/api/full/financials",
   edinet: "/api/edinet/text",
-  disclosure: "/api/disclosure/recent",
+  disclosure: "/api/disclosure/list",
   news: "/api/news/feed",
 } as const
 

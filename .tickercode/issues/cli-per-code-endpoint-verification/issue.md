@@ -1,8 +1,55 @@
 # Issue: `tc memory fetch` の disclosure / news / edinet が銘柄別フィルタされていない
 
 作成日: 2026-04-24
+解決日: 2026-04-24（同日中クローズ）
+ステータス: ✅ **Resolved**（仮説 A 確定、CLI 側修正で解決）
 優先度: Medium（`tc research-idea` のブロッカーではないが、narrative 楽観バイアス検証の精度低下）
 参照: `@tickercode/cli` research/samples/electric-undervalued-ai/final.md / `.claude/shared/api-contract.md` 末尾の確認依頼セクション
+
+## 解決サマリ
+
+BE 側の仕様確認の結果、**仮説 A 確定**（CLI 側の endpoint 選択 + field 名の誤り）。BE 側の修正は不要、CLI 側のみ修正で即解決。
+
+### CLI 側修正内容
+
+| ファイル | 変更 |
+|---|---|
+| `src/memory/paths.ts` | `disclosure: "/api/disclosure/recent"` → `/api/disclosure/list` |
+| `src/memory/fetch.ts::bodyFor` | disclosure / news / edinet の field 名を `code` → `stock_code` に統一、edinet case を追加 |
+
+### 検証結果（2026-04-24、6594 ニデック / 6874 協立電機）
+
+| endpoint | 修正前 | 修正後 |
+|---|---|---|
+| `/api/disclosure/list` | 市場全体の最新 20 件 | ✅ **銘柄別**（6594: 機構改革、6874: 第68期半期報告書 等） |
+| `/api/news/feed` | 他銘柄ニュース混入 | ✅ **銘柄別**（両銘柄とも total=0、ニュース未登録） |
+| `/api/edinet/text` | null (4 バイト) | ✅ **本文取得**（6594: **10.9MB** に拡大、sections + stock_code フィールド確認） |
+
+### BE 側の補足情報（龍五郎回答より）
+
+- `/api/disclosure/recent` は存在するが **市場全体の最新 disclosures 用**（銘柄フィルタ不可、`code` 引数は無視される）
+- `/api/news/feed` の field 名は `stock_code`（`code` ではない）。未指定時は全銘柄最新返却 → 今回の無関係ニュース混入の原因
+- `/api/edinet/text` の body は `{ doc_id }` または `{ stock_code, section_type? }`。`code` は受け付けない
+- BE 側の命名揺れ（`code` / `stock_code` / `ticker_code`）問題: 次回 API 統合で `stock_code` 統一を `.claude/shared/api-contract.md` にルール化する方向で BE 提案
+
+### 完了条件チェック
+
+- [x] BE が endpoint 現仕様を明示（仮説 A 確定）
+- [x] CLI 側 `paths.ts` / `fetch.ts` 修正
+- [x] `tc memory fetch 6594` / `6874` で全 5 endpoint が銘柄別データを返すことを確認
+- [x] 93/93 tests GREEN 維持、typecheck clean
+- [ ] api-contract.md の該当セクション更新（BE 側タスク、「【CLI → BE 確認依頼】」セクションを Resolved 化）
+- [ ] テーマ調査 3 本で深堀り検証精度向上の regression 確認（次回 dogfood で実測）
+
+### 今後の予防策
+
+- CLI 側 `bodyFor` に**既存フィールド名テスト**を追加（endpoint 毎に正しい body schema を送っているか regression で捕捉）
+- 新しい endpoint 追加時は **api-contract.md の body schema を参照必須**のレビュー基準にする
+- `stock_code` / `code` 混在は BE 側で段階的に統一（workspace 側の別 issue で追跡）
+
+---
+
+## 元の調査内容（歴史保全のため残す）
 
 ## 背景
 
