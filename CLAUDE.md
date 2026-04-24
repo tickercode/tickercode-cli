@@ -57,6 +57,33 @@ tool 既定値:
 - TypeScript strict
 - `AskUserQuestion` ツールは使用禁止（番号選択形式で代替）
 
+## 改善点・他プロジェクト依頼の扱い（重要）
+
+dogfood や実装中に BE / FE / CLI 側の改善点が見つかった時は、以下のルールで扱う:
+
+### 1. 改善点は `.tickercode/issues/{slug}/issue.md` に記載
+
+- 本リポジトリ（tickercode-cli）内の **`.tickercode/issues/{slug}/issue.md`** に集約
+- ワークスペース側の `tickercode/docs/issues/` には書かない（CLI の文脈で発生した改善点は CLI 内で管理）
+- フォーマット: `# Issue: <title>`、作成日 / 優先度 / 背景 / スコープ / Agent Team アサイン / 影響 / 完了条件 / 関連（既存 `docs/issues/` のフォーマットを踏襲）
+
+### 2. BE / FE / CLI への指示文章はチャットに書く
+
+- 他プロジェクト（BE=tickercode-api、FE=tickercode-web）や CLI 自身への指示・依頼・確認事項は、Agent は**チャットに明示的に書く**
+- ユーザー（daikissdd）が確認 → 必要に応じて Slack / Issue / PR にコピペする二段構え
+- Agent が勝手に Slack 投稿・外部通知を行うことは**禁止**
+
+### 3. Slack への自動投稿は禁止
+
+- `bun run send:dev-tc` 等の Slack 送信コマンドは Agent が自主的に実行しない
+- ユーザーから明示的な指示があった場合のみ実行
+- Slack 投稿草稿も、チャットに提示 → ユーザーが送信する運用
+
+この 3 ルールにより:
+- 改善点は**痕跡として CLI リポ内に残る**（後で誰でも確認可能）
+- 他プロジェクトへの波及はユーザーが意識的にゲートキーピング
+- Agent の暴走（勝手な社外通知等）を防ぐ
+
 ## コマンド命名規約
 
 ```
