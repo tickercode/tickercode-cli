@@ -1,3 +1,5 @@
+import { loadCredentials } from "./credentials"
+
 const DEFAULT_API_BASE = "https://api.ticker-code.com"
 
 export function getApiBase(): string {
@@ -5,8 +7,12 @@ export function getApiBase(): string {
 }
 
 export function getAuthHeaders(): Record<string, string> {
-  const apiKey = process.env.TICKERCODE_API_KEY
-  return apiKey ? { Authorization: `Bearer ${apiKey}` } : {}
+  // Priority: env var (CI override) > credentials file > none
+  const envKey = process.env.TICKERCODE_API_KEY
+  if (envKey) return { Authorization: `Bearer ${envKey}` }
+  const cred = loadCredentials()
+  if (cred?.api_key) return { Authorization: `Bearer ${cred.api_key}` }
+  return {}
 }
 
 export async function postJson<T = unknown>(path: string, body: unknown): Promise<T> {

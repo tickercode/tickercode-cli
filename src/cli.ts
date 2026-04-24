@@ -8,6 +8,8 @@ import { rankCommand } from "./commands/rank"
 import { overviewCommand } from "./commands/overview"
 import { researchIdeaCommand } from "./commands/research-idea"
 import { researchBatchCommand } from "./commands/research-batch"
+import { reportCommand } from "./commands/report"
+import { authCommand } from "./commands/auth"
 
 const VERSION = "0.0.1"
 
@@ -27,6 +29,8 @@ const main = defineCommand({
     "research-batch": researchBatchCommand,
     mcp: mcpCommand,
     memory: memoryCommand,
+    report: reportCommand,
+    auth: authCommand,
   },
 })
 
