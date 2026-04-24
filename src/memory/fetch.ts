@@ -30,7 +30,7 @@ export type FetchResult = {
   failed: { endpoint: EndpointName; error: string }[]
 }
 
-function bodyFor(endpoint: EndpointName, code5: string): unknown {
+export function bodyFor(endpoint: EndpointName, code5: string): unknown {
   switch (endpoint) {
     case "disclosure":
       return { stock_code: code5, limit: 30 }
