@@ -1,0 +1,90 @@
+# Official Report 8 銘柄 batch 投稿
+# 使い方: bun run dev report batch-save --file ./published.yaml
+
+- title: "ニデック (6594) moat-deepdive — 慎重肯定"
+  body_file: /Users/daikissdd/Dropbox/htdocs/tc/tickercode/tickercode-cli/research/discuss/discuss-nidec-revival-20260424/summary.md
+  stock_code: "6594"
+  is_official: true
+  verdict_code: lukewarm
+  verdict_label: 慎重肯定
+  metadata:
+    panel: moat-deepdive
+    turns: 100
+    session_slug: discuss-nidec-revival-20260424
+
+- title: "ツカダ・グローバルホールディング (2418) value-debate ×2 — 強気度上昇"
+  body_file: /Users/daikissdd/Dropbox/htdocs/tc/tickercode/tickercode-cli/research/discuss/discuss-tsukada-ghd-evaluation-20260424/summary.md
+  stock_code: "2418"
+  is_official: true
+  verdict_code: buy
+  verdict_label: 強気度上昇
+  metadata:
+    panel: value-debate-x2
+    turns: 160
+    session_slug: discuss-tsukada-ghd-evaluation-20260424
+
+- title: "パーク24 (4666) moat-deepdive — lukewarm 3 極"
+  body_file: /Users/daikissdd/Dropbox/htdocs/tc/tickercode/tickercode-cli/research/discuss/discuss-park24-evaluation-20260424/summary.md
+  stock_code: "4666"
+  is_official: true
+  verdict_code: lukewarm
+  verdict_label: lukewarm 3 極
+  metadata:
+    panel: moat-deepdive
+    turns: 100
+    session_slug: discuss-park24-evaluation-20260424
+
+- title: "山岡家 (3399) moat-deepdive — hate vs love"
+  body_file: /Users/daikissdd/Dropbox/htdocs/tc/tickercode/tickercode-cli/research/discuss/discuss-yamaokaya-evaluation-20260424/summary.md
+  stock_code: "3399"
+  is_official: true
+  verdict_code: mixed
+  verdict_label: hate vs love
+  metadata:
+    panel: moat-deepdive
+    turns: 100
+    session_slug: discuss-yamaokaya-evaluation-20260424
+
+- title: "トリドリ (9337) jp-classic + value-debate — panel 次第で逆転"
+  body_file: /Users/daikissdd/Dropbox/htdocs/tc/tickercode/tickercode-cli/research/discuss/discuss-toridori-evaluation-20260424/summary.md
+  stock_code: "9337"
+  is_official: true
+  verdict_code: mixed
+  verdict_label: panel 次第で逆転
+  metadata:
+    panel: jp-classic + value-debate
+    turns: 200
+    session_slug: discuss-toridori-evaluation-20260424
+
+- title: "カナデビア (7004) moat-deepdive — binary outcome"
+  body_file: /Users/daikissdd/Dropbox/htdocs/tc/tickercode/tickercode-cli/research/discuss/discuss-kanadevia-evaluation-20260424/summary.md
+  stock_code: "7004"
+  is_official: true
+  verdict_code: mixed
+  verdict_label: binary outcome
+  metadata:
+    panel: moat-deepdive
+    turns: 100
+    session_slug: discuss-kanadevia-evaluation-20260424
+
+- title: "木村化工機 (6378) jp-classic — 3 者一致 Buy"
+  body_file: /Users/daikissdd/Dropbox/htdocs/tc/tickercode/tickercode-cli/research/discuss/discuss-kimura-kakouki-evaluation-20260424/summary.md
+  stock_code: "6378"
+  is_official: true
+  verdict_code: buy
+  verdict_label: 3 者一致 Buy
+  metadata:
+    panel: jp-classic
+    turns: 100
+    session_slug: discuss-kimura-kakouki-evaluation-20260424
+
+- title: "JVCケンウッド (6632) moat-deepdive — 3 者一致 strong Buy"
+  body_file: /Users/daikissdd/Dropbox/htdocs/tc/tickercode/tickercode-cli/research/discuss/discuss-jvc-kenwood-evaluation-20260424/summary.md
+  stock_code: "6632"
+  is_official: true
+  verdict_code: strong_buy
+  verdict_label: 3 者一致 strong Buy（最強）
+  metadata:
+    panel: moat-deepdive
+    turns: 100
+    session_slug: discuss-jvc-kenwood-evaluation-20260424
