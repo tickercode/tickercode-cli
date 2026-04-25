@@ -72,7 +72,33 @@ async function apiPost<T = unknown>(path: string, body: unknown): Promise<T> {
     const text = await res.text().catch(() => "")
     throw new Error(`API ${res.status} ${res.statusText} — ${path}\n${text.slice(0, 500)}`)
   }
-  return (await res.json()) as T
+
+  const json = (await res.json()) as T & {
+    success?: boolean
+    status?: number
+    message?: string
+    error?: unknown
+  }
+
+  // HTTP 200 だが body.success===false (BE が ApiResponse でエラーを包んだケース)
+  // 例: { success:false, status:500, message:"INTERNAL_SERVER_ERROR", error:"..." }
+  if (json && json.success === false) {
+    const status = json.status ?? "?"
+    const message = json.message ?? "API returned success=false"
+    const errStr =
+      typeof json.error === "string"
+        ? json.error
+        : json.error
+        ? JSON.stringify(json.error).slice(0, 400)
+        : ""
+    process.stderr.write(
+      pc.red(`API エラー (${status} ${message}) — ${path}\n`) +
+        (errStr ? pc.dim(`  ${errStr}\n`) : ""),
+    )
+    process.exit(1)
+  }
+
+  return json as T
 }
 
 // --- save ---
@@ -279,15 +305,17 @@ const listCommand = defineCommand({
 
     const res = await apiPost<{
       success: boolean
-      data: Array<{ id: string; short_id: string; slug: string; title: string; is_public: boolean; created_at: string }>
-    }>(API_PATH_LIST, { limit, mine_only: mineOnly })
+      data: {
+        items: Array<{ id: string; short_id: string; slug: string; title: string; is_public: boolean; created_at: string }>
+      }
+    }>(API_PATH_LIST, { limit, mode: mineOnly ? "mine" : "both" })
 
     if (!res.success || !res.data) {
       process.stderr.write(pc.red("取得に失敗しました。\n"))
       process.exit(1)
     }
 
-    const reports = res.data
+    const reports = res.data.items ?? []
     if (reports.length === 0) {
       process.stdout.write(pc.dim("レポートがありません。\n"))
       return
