@@ -16,3 +16,4 @@ research/**/*
 !research/**/.gitkeep
 !research/README.md
 !research/samples/**
+.playwright-mcp/

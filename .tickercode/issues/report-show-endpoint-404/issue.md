@@ -1,9 +1,11 @@
 # Issue: `/api/report/show` が 404、FE 個別レポートページが全件 404 表示
 
 作成日: 2026-04-25
-ステータス: 🔴 **Open**（**BE 確認依頼中** — endpoint 不在 or path 移動）
-優先度: **High**（公式レポート 8 件を作成成功したが、ユーザーは FE 個別ページを開くと 404 ページに到達。実質的に閲覧不可）
-参照: 8 件公式レポート公開フロー（`published.yaml` 経由 batch-save 後）、`src/commands/report.ts:73` `apiPost`
+解決日: 2026-04-25（最初の Resolve）
+**再オープン: 2026-04-25**（FE 認証 redirect 問題が判明）
+ステータス: 🔴 **Reopen**（FE 側 auth middleware で `/login` 強制 redirect、公開レポートが未認証ユーザーから閲覧不可）
+優先度: **High**（DB は公開だが FE は実質 private、SNS 共有しても他ユーザー見れない）
+参照: 8 件公式レポート公開フロー（`published.yaml` 経由 batch-save 後）
 
 ## 概要
 
@@ -98,3 +100,52 @@ curl https://ticker-code.com/report/bdd4ca6f/6594-nidec-moat-deepdive-20260425
 ### 関連 commits
 - tickercode-api: `cd3a884` (alias 追加)
 - tickercode-api: `d795a118` (short_id 経由参照)
+
+---
+
+## Reopen ログ (2026-04-25)
+
+🔴 **Reopen** — show endpoint 自体は復活したが、FE 個別ページが**未認証ユーザーを `/login` に強制 redirect** することが判明。
+
+### 検証結果（Playwright 実ブラウザ、未認証）
+
+| 経路 | 結果 |
+|---|---|
+| API `/api/report/list`（未認証） | ✅ `success:true`、is_public:true 8 件返る |
+| API `/api/report/show`（curl + Bearer） | ✅ 200 OK + 該当レポート JSON |
+| **FE `/report/{short_id}/{slug}` 直接アクセス（未認証）** | ❌ **`/login` に redirect、ページタイトル「ログイン - ティッカーコード」** |
+| curl の HTTP status 単体 | 200（CDN レベルでは success、SSR で middleware が動く前） |
+
+### 影響
+
+- DB では `is_public:true` で公開フラグ ON
+- CDN レベル / API レベルでは 200 OK
+- **しかし FE の auth middleware が `/report/[short_id]/[slug]` を保護**、未ログインユーザーは login へ
+- 結果: SNS / Slack / メールで URL 共有しても、他ユーザー（未ログイン）は閲覧不可
+- **公開レポート（is_public:true）の意味が失われている**
+
+### 仮説
+
+1. **FE middleware が `/report/*` を一律保護**し、is_public フラグを参照していない
+2. **SSR で `/api/report/show` を呼ぶ際 Bearer なし** → 401 → login redirect
+3. **プラン制で Official レポートも認証必須**にしている（is_public:true でも login 要求）
+
+### BE / FE への追加確認依頼
+
+1. `/report/[short_id]/[slug]` が認証必須になっていないか（`middleware.ts` / `next.config` 確認）
+2. `is_public:true` のレポートは未ログインでも閲覧可にする想定か（仕様レベル合意）
+3. SSR 側で `/api/report/show` を Bearer なしで呼んだ時の挙動（401 を 404 にマップ？login redirect？）
+
+### 検証コマンド（再現）
+
+```typescript
+// Playwright（未認証）
+await page.goto('https://ticker-code.com/report/bdd4ca6f/6594-nidec-moat-deepdive-20260425');
+// → 自動的に /login に redirect、Page Title: "ログイン - ティッカーコード"
+```
+
+### 完了条件（追加）
+
+- [ ] `/report/[short_id]/[slug]` が未認証でも閲覧可能（is_public:true なら）
+- [ ] Playwright で未認証 navigate し、本文 + 参加者 + 決定的瞬間が表示されることを確認
+- [ ] `/api/report/show` が認証不要モード（is_public:true 限定）に対応
