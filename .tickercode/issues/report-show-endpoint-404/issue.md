@@ -75,3 +75,26 @@ id=dfde99da-74f4-44f8-87f5-fc28e90b023e slug=jvcケンウッド-6632-moat-deepdi
 - `report-create-500-db-insert-failure/`（解決済、BE authGuard + stock_code 正規化修正）
 - `report-slug-ascii-only/`（slug を英数字統一する仕様変更要望、別 issue）
 - `cli-apipost-surface-body-error/`（CLI 側の 404 ハンドリング、apiPost で詳細表示）
+
+---
+
+## 解決ログ (2026-04-25)
+
+✅ **Resolved**
+
+### 修正内容
+- BE: `/api/report/show` を `detailReportEndpoint` の alias として route 登録 (CLI 互換)
+- FE: URL 構造 `/report/{short_id}/{slug}` で 200 OK 確認
+
+### 検証
+```
+curl -X POST https://api.ticker-code.com/api/report/show -d '{"id":"bdd4ca6f"}'
+→ 200 OK + 該当レポート JSON
+
+curl https://ticker-code.com/report/bdd4ca6f/6594-nidec-moat-deepdive-20260425
+→ 200 OK
+```
+
+### 関連 commits
+- tickercode-api: `cd3a884` (alias 追加)
+- tickercode-api: `d795a118` (short_id 経由参照)

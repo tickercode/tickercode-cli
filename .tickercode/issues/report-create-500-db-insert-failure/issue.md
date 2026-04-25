@@ -134,3 +134,25 @@ curl -sS -X POST "https://api.ticker-code.com/api/report/create" \
 - `.tickercode/issues/cli-apipost-surface-body-error/`（CLI 側の error 詳細表示改善、同時に着手可）
 - 今日の 8 session の保存ファイル（すべて `research/discuss/discuss-*-20260424/summary.md`）
 - `published.yaml`（BE 修正後の再実行用、commit 済）
+
+---
+
+## 解決ログ (2026-04-25)
+
+✅ **Resolved**
+
+### 原因 1: authGuard の漏れ
+`/api/report/create|update|toggle-visibility|delete` が public route 配下に登録され
+authGuard を通らず Bearer token が解析されない → 401 / 認証なしで以降の処理に進んでいた。
+
+### 原因 2: stock_code FK 違反
+`jpx_stock.code` は 5桁保存だが YAML batch-save の `stock_code: "6594"` (4桁)
+そのまま insert → FK 制約違反 → 500 INTERNAL_SERVER_ERROR (DB error が body.error に
+truncate されて返却されていた)
+
+### 修正
+- routes/index.ts: mutating endpoints を authed 配下に移動
+- report-api.ts: normalizeStockCode() で 4桁 → 5桁正規化
+
+batch-save 8/8 succeeded を確認。
+commits: tickercode-api `c0a60ffd`, `6dff949e`

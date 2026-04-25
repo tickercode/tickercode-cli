@@ -149,3 +149,23 @@ BE 側の `/api/report/create` 401 問題（別 issue、BE 側で調査中）が
 - BE 側調査中の `/api/report/create` 401 問題（未起票、BE 龍五郎さんに確認中）
 - `src/lib/api-client.ts` の `postJson`（別名、report.ts の `apiPost` とほぼ同等の実装）も同じ問題を抱えるため、共通化 + 同時修正検討
 - `CLAUDE.md` 「API レスポンスは `ApiResponse<T>` ラッパーで統一」の規約整備
+
+---
+
+## 解決ログ (2026-04-25)
+
+✅ **Resolved**
+
+apiPost 内で HTTP 200 + body.success=false ケースを構造化表示するよう修正。
+
+```
+API エラー (500 INTERNAL_SERVER_ERROR) — /api/report/create
+  Failed query: insert into "report" ...
+```
+
+として stderr 表示 → process.exit(1)。
+
+合わせて `/api/report/list` への request body も `mode: 'mine'|'both'` に修正
+(以前は `mine_only` 送信で BE が無視していた)。
+
+commit: tickercode-cli `a7a3a77`
