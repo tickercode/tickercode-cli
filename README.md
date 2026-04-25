@@ -100,6 +100,39 @@ Batch save results:
 | `sell` | 売り |
 | `strong_sell` | 強い売り |
 
+## CLI クライアント連携 (`tc setup`)
+
+Claude Code 以外（Codex CLI、Gemini CLI）でも skill + MCP server を使えます。
+
+```bash
+tc setup codex     # ~/.codex/config.toml + ~/.agents/skills/ に配置
+tc setup gemini    # ~/.gemini/settings.json + ~/.gemini/GEMINI.md に配置
+```
+
+- 既存設定を保持して **idempotent** に上書き判定（再実行で skip、`--force` で更新）
+- `~/.tickercode/credentials.json`（`tc auth login` で生成）が認証ソース
+- 配置先カスタマイズ: `--config-path` / `--settings-path` / `--gemini-md-path` / `--skills-dir`
+
+### 各 CLI の動作差分
+
+| 機能 | Claude Code | Codex CLI | Gemini CLI |
+|---|---|---|---|
+| MCP server | ネイティブ | ネイティブ | ネイティブ |
+| Skill 仕様 | `SKILL.md`（既存）| `SKILL.md`（同形式） | `GEMINI.md` にフラット統合 |
+| `/tc-discuss` slash command | ✅ | △（自然言語誘導） | ❌（自然言語誘導） |
+| 自動配置 | （未実装、Phase 4 予定）| `tc setup codex` | `tc setup gemini` |
+
+### Codex 動作確認例
+
+```bash
+codex mcp list
+# Name        Command  Args  Env                       Cwd  Status   Auth
+# tickercode  tc       mcp   TICKERCODE_API_KEY=*****  -    enabled  Unsupported
+
+codex exec "tickercode の get_stock ツールで 6594 (ニデック) の overview を取得"
+# → ニデック（6594）: 株価 2,465 円、PER 15.82 倍、ROE 9.57%、時価総額 2.94 兆円
+```
+
 ## 認証
 
 `tc report save` など認証が必要なコマンドは、事前に `tc auth login` で API Key を設定してください。
