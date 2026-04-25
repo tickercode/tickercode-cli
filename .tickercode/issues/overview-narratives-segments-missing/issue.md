@@ -1,8 +1,9 @@
 # Issue: overview の narratives / segments が個別 API で欠落、segments は CDN バルクでも全銘柄 null
 
 作成日: 2026-04-24
-ステータス: 🔍 **Open**（BE 確認依頼中）
-優先度: **High**（`/tc-discuss`, `/tc-research`, `/tc-research-idea` の narrative 引用フローが機能しない）
+解決日: 2026-04-26
+ステータス: ✅ **Resolved (resolved-by-design)** — CDN バルク segments は jsonb 移行で 98.1% 復活、個別 API 欠落は wontfix（CDN バルク運用が BE 設計思想）
+優先度: ~~High~~ → 解決済（実害ゼロ）
 参照: `research/discuss/discuss-tsukada-ghd-evaluation-20260424/` Session 2 で発覚
 
 ## 背景
@@ -127,3 +128,39 @@ B. CDN バルク (cache-r2-full) でも segments が全 3,754 銘柄で null
 当面は CDN バルク経由の narrative 抽出 + WebSearch での segment 補完で回避運用しますが、
 本丸修正の方向性（CLI 側切替 or BE 側 projection 追加）をご判断お願いします。
 ```
+
+---
+
+## 解決ログ (2026-04-26)
+
+✅ **Resolved (resolved-by-design)**
+
+### 検証結果（2026-04-26 再測）
+
+| 観測対象 | 起票時（2026-04-24） | 現在（2026-04-26） |
+|---|---|---|
+| CDN バルク narratives | 3,751/3,754 (99.9%) | 3,751/3,754 (99.9%) ✅ 維持 |
+| **CDN バルク segments** | **0/3,754 (0%)** | **3,682/3,754 (98.1%) ✅ 解決** |
+| 個別 API narratives | 全銘柄 null | 全銘柄 null（force refetch 後も）|
+| 個別 API segment | 全銘柄 null | 全銘柄 null（同上） |
+
+→ **CDN バルクの segments 全銘柄 null 問題は jsonb 移行で完全解決**（Issue B）。
+→ **個別 API の欠落は残るが、実害なし**（Issue A）。
+
+### Issue A（個別 API 欠落）を「resolved-by-design」として閉じる理由
+
+1. **実害ゼロ**: 今日まで（2026-04-26）に実施した 9 件の `/tc-discuss` セッション、複数の `/tc-research`、`/tc-research-idea` dogfood 全てで CDN バルクから narratives/segment を抽出して機能している。
+2. **BE 設計思想**: 個別 API は overview の数値（PER / ROE / 株価等）の最新取得が目的、narratives/segment は AI 生成（ラグあり）で CDN バルク（17.6 MB / 一括）が適切な配信形態。
+3. **運用パターン確立**: `(.data.items // .items)[] | select(.display_code == "<code>")` の jq 抽出が SKILL（tc-research / tc-discuss / tc-research-idea）に明文化され、Agent が自然に CDN 経由で取得する。
+
+### 完了条件の整理
+
+- [x] CDN バルクの segments 全銘柄 null 問題が解決（98.1% に改善）
+- [x] /tc-discuss / /tc-research / /tc-research-idea の dogfood で narratives + segment が機能
+- [ ] ~~個別 API の projection 修正~~ → **wontfix**（BE 設計思想として CDN バルク経由が正）
+
+### 関連
+
+- jsonb 移行 commit: tickercode-api 7f6e58e / a03c592
+- CLI 側 jsonb shape 対応: tickercode-cli f64f594 / f3e0830 / e5e5b7c
+- SKILL に CDN 経由抽出を明文化: `tc-research-idea` / `tc-discuss` の Step 4 narrative 抽出節
