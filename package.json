@@ -10,6 +10,7 @@
   "module": "./dist/cli.mjs",
   "files": [
     "dist",
+    ".claude/skills",
     "README.md",
     "LICENSE"
   ],

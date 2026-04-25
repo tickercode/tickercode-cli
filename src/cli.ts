@@ -10,6 +10,8 @@ import { researchIdeaCommand } from "./commands/research-idea"
 import { researchBatchCommand } from "./commands/research-batch"
 import { reportCommand } from "./commands/report"
 import { authCommand } from "./commands/auth"
+import { issuesCommand } from "./commands/issues/index"
+import { setupCommand } from "./commands/setup"
 
 const VERSION = "0.0.1"
 
@@ -31,6 +33,8 @@ const main = defineCommand({
     memory: memoryCommand,
     report: reportCommand,
     auth: authCommand,
+    issues: issuesCommand,
+    setup: setupCommand,
   },
 })
 
