@@ -23,7 +23,7 @@ export const financialCommand = defineCommand({
   },
   async run({ args }) {
     const code5 = normalizeCode(String(args.code))
-    const data = await postJson("/api/full/financials", { code: code5 })
+    const data = await postJson("/api/full/financials", { stock_code: code5 })
     formatOutput(data, {
       kind: "financial",
       format: String(args.format) as Format,

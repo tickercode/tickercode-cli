@@ -23,7 +23,7 @@ export const stockCommand = defineCommand({
   },
   async run({ args }) {
     const code5 = normalizeCode(String(args.code))
-    const data = await postJson("/api/full/stock", { code: code5 })
+    const data = await postJson("/api/full/stock", { stock_code: code5 })
     formatOutput(data, {
       kind: "stock",
       format: String(args.format) as Format,

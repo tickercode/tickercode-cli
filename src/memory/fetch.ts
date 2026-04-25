@@ -39,7 +39,7 @@ export function bodyFor(endpoint: EndpointName, code5: string): unknown {
     case "edinet":
       return { stock_code: code5 }
     default:
-      return { code: code5 }
+      return { stock_code: code5 }
   }
 }
 
