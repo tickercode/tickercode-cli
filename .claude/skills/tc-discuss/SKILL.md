@@ -47,7 +47,7 @@ Agent（Claude）が素の思考でユーザーと会話。相談 / 壁打ち / 
 /tc-discuss "日経平均の PER は高すぎるか？" --as cis
 ```
 
-現在利用可能なモデル（`.claude/skills/tc-discuss/models/` 配下）:
+現在利用可能なモデル（`models/`（SKILL.md からの相対パス） 配下）:
 
 | id | 投資家 | 特徴 |
 |---|---|---|
@@ -75,7 +75,7 @@ Agent（Claude）が素の思考でユーザーと会話。相談 / 壁打ち / 
 /tc-discuss "テスラ空売り" --team bear,bull,fisher,moderator
 ```
 
-#### プリセット（3 種、`.claude/skills/tc-discuss/presets/` 配下）
+#### プリセット（3 種、`presets/`（SKILL.md からの相対パス） 配下）
 
 | preset | 構成 | 向くテーマ |
 |---|---|---|
@@ -467,14 +467,14 @@ panel auto-selected: moat-deepdive
 
 ### model の追加
 
-1. `.claude/skills/tc-discuss/models/{id}.md` を作成
+1. `models/{id}.md`（SKILL.md 配下）を作成
 2. frontmatter で `name` / `full_name` / `style` / `era` / `nationality` を記載
 3. 本文に投資哲学・手法・語彙・口癖・名言を記述
 4. `models/README.md` のテンプレートに従う
 
 ### preset の追加
 
-1. `.claude/skills/tc-discuss/presets/{id}.md` を作成
+1. `presets/{id}.md`（SKILL.md 配下）を作成
 2. frontmatter で `name` / `members` (csv) / `topic_type` を記載
 3. 想定テーマと進行の型を記述
 
