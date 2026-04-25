@@ -228,7 +228,7 @@ const saveCommand = defineCommand({
 
     process.stdout.write(pc.dim("Saving report…\n"))
 
-    const res = await apiPost<{ success: boolean; data: { id: string; slug: string } }>(
+    const res = await apiPost<{ success: boolean; data: { id: string; short_id: string; slug: string } }>(
       API_PATH_CREATE,
       payload,
     )
@@ -238,8 +238,8 @@ const saveCommand = defineCommand({
       process.exit(1)
     }
 
-    const { id, slug } = res.data
-    const url = `${getWebBase()}/report/${slug}`
+    const { id, short_id: shortId, slug } = res.data
+    const url = `${getWebBase()}/report/${shortId}/${slug}`
     const effectivePublic = isOfficial ? true : Boolean(args.public)
     process.stdout.write(
       `${pc.green("✓")} レポート保存完了\n` +
@@ -279,7 +279,7 @@ const listCommand = defineCommand({
 
     const res = await apiPost<{
       success: boolean
-      data: Array<{ id: string; slug: string; title: string; is_public: boolean; created_at: string }>
+      data: Array<{ id: string; short_id: string; slug: string; title: string; is_public: boolean; created_at: string }>
     }>(API_PATH_LIST, { limit, mine_only: mineOnly })
 
     if (!res.success || !res.data) {
@@ -300,7 +300,7 @@ const listCommand = defineCommand({
       const date = r.created_at ? r.created_at.slice(0, 10) : "      "
       process.stdout.write(
         `  ${pc.cyan(r.id.slice(0, 8))}  ${vis}  ${date}  ${r.title}\n` +
-          `           ${pc.dim(`${webBase}/report/${r.slug}`)}\n`,
+          `           ${pc.dim(`${webBase}/report/${r.short_id}/${r.slug}`)}\n`,
       )
     }
   },
@@ -323,7 +323,7 @@ const showCommand = defineCommand({
   async run({ args }) {
     const res = await apiPost<{
       success: boolean
-      data: { id: string; slug: string; title: string; body_markdown: string; is_public: boolean; created_at: string }
+      data: { id: string; short_id: string; slug: string; title: string; body_markdown: string; is_public: boolean; created_at: string }
     }>(API_PATH_SHOW, { id: String(args.id) })
 
     if (!res.success || !res.data) {
@@ -339,7 +339,7 @@ const showCommand = defineCommand({
         `slug:    ${r.slug}\n` +
         `公開:    ${r.is_public ? pc.green("public") : pc.dim("private")}\n` +
         `作成日:  ${r.created_at?.slice(0, 10) ?? "—"}\n` +
-        `url:     ${pc.cyan(`${webBase}/report/${r.slug}`)}\n\n` +
+        `url:     ${pc.cyan(`${webBase}/report/${r.short_id}/${r.slug}`)}\n\n` +
         `${pc.dim("─".repeat(60))}\n\n` +
         `${r.body_markdown}\n`,
     )
@@ -361,7 +361,7 @@ const publishCommand = defineCommand({
     },
   },
   async run({ args }) {
-    const res = await apiPost<{ success: boolean; data: { id: string; slug: string } }>(
+    const res = await apiPost<{ success: boolean; data: { id: string; short_id: string; slug: string } }>(
       API_PATH_UPDATE,
       { id: String(args.id), is_public: true },
     )
@@ -371,8 +371,8 @@ const publishCommand = defineCommand({
       process.exit(1)
     }
 
-    const { id, slug } = res.data
-    const url = `${getWebBase()}/report/${slug}`
+    const { id, short_id: shortId, slug } = res.data
+    const url = `${getWebBase()}/report/${shortId}/${slug}`
     process.stdout.write(
       `${pc.green("✓")} レポートを公開しました\n` +
         `  id:  ${pc.cyan(id)}\n` +
@@ -531,7 +531,7 @@ const batchSaveCommand = defineCommand({
       const label = entry.title ?? "(no title)"
       try {
         const payload = await buildBatchPayload(entry, baseDir)
-        const res = await apiPost<{ success: boolean; data: { id: string; slug: string } }>(
+        const res = await apiPost<{ success: boolean; data: { id: string; short_id: string; slug: string } }>(
           API_PATH_CREATE,
           payload,
         )
