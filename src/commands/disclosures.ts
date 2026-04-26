@@ -3,6 +3,50 @@ import pc from "picocolors"
 import { postJson } from "../lib/api-client"
 import { unwrap } from "../lib/format"
 
+const financialCommand = defineCommand({
+  meta: {
+    name: "financial",
+    description:
+      "Fetch structured forecast revision (revised + prior + delta + actual_ytd) for a disclosure.",
+  },
+  args: {
+    "doc-id": {
+      type: "positional",
+      description: "Disclosure ID (TDNet 18-digit e.g. 140120260424509954, or JPX 14-digit e.g. 20260424509954)",
+      required: true,
+    },
+    format: {
+      type: "string",
+      description: "Output format: json (Phase 1 only)",
+      default: "json",
+      alias: "f",
+    },
+  },
+  async run({ args }) {
+    const docId = String(args["doc-id"]).trim()
+    if (!/^\d{14,18}$/.test(docId)) {
+      process.stderr.write(
+        pc.red(`Invalid doc-id: ${docId} (expected 14-18 digits)\n`),
+      )
+      process.exit(1)
+    }
+    const format = String(args.format)
+    if (format !== "json") {
+      process.stderr.write(
+        pc.yellow(`--format json only is supported (got: ${format})\n`),
+      )
+      process.exit(1)
+    }
+
+    const res = await postJson<unknown>(
+      "/api/disclosure/financial",
+      { disclosure_id: docId },
+    )
+    const data = unwrap(res)
+    process.stdout.write(`${JSON.stringify(data, null, 2)}\n`)
+  },
+})
+
 export const VALID_DOC_TYPES = [
   "earnings",
   "forecast",
@@ -29,7 +73,10 @@ export const disclosuresCommand = defineCommand({
   meta: {
     name: "disclosures",
     description:
-      "Fetch market-wide TDnet disclosures (Phase 1: --days / --limit / --doc-type / --format json).",
+      "Fetch market-wide TDnet disclosures. Sub: financial (forecast revision diff).",
+  },
+  subCommands: {
+    financial: financialCommand,
   },
   args: {
     days: {

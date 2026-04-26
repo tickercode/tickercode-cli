@@ -33,7 +33,7 @@ var import_citty20 = require("citty");
 // package.json
 var package_default = {
   name: "@tickercode/cli",
-  version: "0.1.2",
+  version: "0.2.0",
   description: "Command-line interface for ticker-code.com \u2014 Japanese stock analysis for humans and agents",
   type: "module",
   bin: {
@@ -4020,6 +4020,50 @@ var rankCommand = (0, import_citty6.defineCommand)({
 // src/commands/disclosures.ts
 var import_citty7 = require("citty");
 var import_picocolors5 = __toESM(require("picocolors"), 1);
+var financialCommand2 = (0, import_citty7.defineCommand)({
+  meta: {
+    name: "financial",
+    description: "Fetch structured forecast revision (revised + prior + delta + actual_ytd) for a disclosure."
+  },
+  args: {
+    "doc-id": {
+      type: "positional",
+      description: "Disclosure ID (TDNet 18-digit e.g. 140120260424509954, or JPX 14-digit e.g. 20260424509954)",
+      required: true
+    },
+    format: {
+      type: "string",
+      description: "Output format: json (Phase 1 only)",
+      default: "json",
+      alias: "f"
+    }
+  },
+  async run({ args }) {
+    const docId = String(args["doc-id"]).trim();
+    if (!/^\d{14,18}$/.test(docId)) {
+      process.stderr.write(
+        import_picocolors5.default.red(`Invalid doc-id: ${docId} (expected 14-18 digits)
+`)
+      );
+      process.exit(1);
+    }
+    const format = String(args.format);
+    if (format !== "json") {
+      process.stderr.write(
+        import_picocolors5.default.yellow(`--format json only is supported (got: ${format})
+`)
+      );
+      process.exit(1);
+    }
+    const res = await postJson(
+      "/api/disclosure/financial",
+      { disclosure_id: docId }
+    );
+    const data = unwrap(res);
+    process.stdout.write(`${JSON.stringify(data, null, 2)}
+`);
+  }
+});
 var VALID_DOC_TYPES = [
   "earnings",
   "forecast",
@@ -4036,7 +4080,10 @@ function parseIntOr(v, fallback) {
 var disclosuresCommand = (0, import_citty7.defineCommand)({
   meta: {
     name: "disclosures",
-    description: "Fetch market-wide TDnet disclosures (Phase 1: --days / --limit / --doc-type / --format json)."
+    description: "Fetch market-wide TDnet disclosures. Sub: financial (forecast revision diff)."
+  },
+  subCommands: {
+    financial: financialCommand2
   },
   args: {
     days: {
