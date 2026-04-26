@@ -5,6 +5,7 @@ import { mcpCommand } from "./commands/mcp"
 import { memoryCommand } from "./commands/memory"
 import { screenCommand } from "./commands/screen"
 import { rankCommand } from "./commands/rank"
+import { disclosuresCommand } from "./commands/disclosures"
 import { overviewCommand } from "./commands/overview"
 import { researchIdeaCommand } from "./commands/research-idea"
 import { researchBatchCommand } from "./commands/research-batch"
@@ -26,6 +27,7 @@ const main = defineCommand({
     financial: financialCommand,
     screen: screenCommand,
     rank: rankCommand,
+    disclosures: disclosuresCommand,
     overview: overviewCommand,
     "research-idea": researchIdeaCommand,
     "research-batch": researchBatchCommand,
