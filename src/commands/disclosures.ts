@@ -3,50 +3,6 @@ import pc from "picocolors"
 import { postJson } from "../lib/api-client"
 import { unwrap } from "../lib/format"
 
-const financialCommand = defineCommand({
-  meta: {
-    name: "financial",
-    description:
-      "Fetch structured forecast revision (revised + prior + delta + actual_ytd) for a disclosure.",
-  },
-  args: {
-    "doc-id": {
-      type: "positional",
-      description: "Disclosure ID (TDNet 18-digit e.g. 140120260424509954, or JPX 14-digit e.g. 20260424509954)",
-      required: true,
-    },
-    format: {
-      type: "string",
-      description: "Output format: json (Phase 1 only)",
-      default: "json",
-      alias: "f",
-    },
-  },
-  async run({ args }) {
-    const docId = String(args["doc-id"]).trim()
-    if (!/^\d{14,18}$/.test(docId)) {
-      process.stderr.write(
-        pc.red(`Invalid doc-id: ${docId} (expected 14-18 digits)\n`),
-      )
-      process.exit(1)
-    }
-    const format = String(args.format)
-    if (format !== "json") {
-      process.stderr.write(
-        pc.yellow(`--format json only is supported (got: ${format})\n`),
-      )
-      process.exit(1)
-    }
-
-    const res = await postJson<unknown>(
-      "/api/disclosure/financial",
-      { disclosure_id: docId },
-    )
-    const data = unwrap(res)
-    process.stdout.write(`${JSON.stringify(data, null, 2)}\n`)
-  },
-})
-
 export const VALID_DOC_TYPES = [
   "earnings",
   "forecast",
@@ -69,14 +25,33 @@ function parseIntOr(v: unknown, fallback: number): number {
   return Number.isFinite(n) ? n : fallback
 }
 
+async function runFinancial(docId: string, format: string): Promise<void> {
+  if (!/^\d{14,18}$/.test(docId)) {
+    process.stderr.write(
+      pc.red(`Invalid --financial doc-id: ${docId} (expected 14-18 digits)\n`),
+    )
+    process.exit(1)
+  }
+  if (format !== "json") {
+    process.stderr.write(
+      pc.yellow(`--format json only is supported (got: ${format})\n`),
+    )
+    process.exit(1)
+  }
+
+  const res = await postJson<unknown>(
+    "/api/disclosure/financial",
+    { disclosure_id: docId },
+  )
+  const data = unwrap(res)
+  process.stdout.write(`${JSON.stringify(data, null, 2)}\n`)
+}
+
 export const disclosuresCommand = defineCommand({
   meta: {
     name: "disclosures",
     description:
-      "Fetch market-wide TDnet disclosures. Sub: financial (forecast revision diff).",
-  },
-  subCommands: {
-    financial: financialCommand,
+      "Fetch market-wide TDnet disclosures. Use --financial <doc-id> for forecast revision diff.",
   },
   args: {
     days: {
@@ -97,6 +72,10 @@ export const disclosuresCommand = defineCommand({
       type: "string",
       description: "Filter by ticker code (4 or 5 digits, e.g. 7203 or 72030)",
     },
+    financial: {
+      type: "string",
+      description: "Fetch forecast revision diff for a disclosure ID (TDNet 18-digit or JPX 14-digit). Switches to financial mode and ignores other filters.",
+    },
     format: {
       type: "string",
       description: "Output format (Phase 1: json only)",
@@ -105,12 +84,20 @@ export const disclosuresCommand = defineCommand({
     },
   },
   async run({ args }) {
+    const format = String(args.format)
+
+    // Phase C: --financial が指定された場合は forecast diff モードに分岐
+    if (args.financial) {
+      await runFinancial(String(args.financial).trim(), format)
+      return
+    }
+
+    // Phase 1: search モード (既存挙動)
     const days = Math.max(1, Math.min(parseIntOr(args.days, 7), 90))
     const rawLimit = parseIntOr(args.limit, 100)
     const limit = rawLimit === 0 ? 500 : Math.max(1, Math.min(rawLimit, 500))
     const docType = args["doc-type"] ? String(args["doc-type"]) : undefined
     const code = args.code ? String(args.code).trim() : undefined
-    const format = String(args.format)
 
     if (code && !/^\d{4,5}$/.test(code)) {
       process.stderr.write(pc.red(`Invalid --code: ${code} (expected 4 or 5 digits)\n`))
