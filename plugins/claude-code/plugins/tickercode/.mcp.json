@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "tickercode": {
+      "command": "tc",
+      "args": [
+        "mcp"
+      ],
+      "env": {
+        "TICKERCODE_API_KEY": "$TICKERCODE_API_KEY"
+      }
+    }
+  }
+}

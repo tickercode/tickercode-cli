@@ -1,0 +1,19 @@
+{
+  "name": "tickercode",
+  "description": "Japanese stock research skills and MCP tools powered by ticker-code.com.",
+  "version": "0.0.1",
+  "author": {
+    "name": "TickerCode",
+    "email": "support@ticker-code.com"
+  },
+  "homepage": "https://ticker-code.com",
+  "repository": "https://github.com/tickercode/cli",
+  "license": "MIT",
+  "keywords": [
+    "tickercode",
+    "japanese-stocks",
+    "finance",
+    "mcp",
+    "research"
+  ]
+}

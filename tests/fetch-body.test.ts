@@ -31,12 +31,12 @@ describe("ENDPOINTS mapping (api-contract.md 準拠)", () => {
 })
 
 describe("bodyFor: endpoint 毎の body schema regression", () => {
-  it("overview: { code }", () => {
-    expect(bodyFor("overview", CODE5)).toEqual({ code: CODE5 })
+  it("overview: { stock_code }", () => {
+    expect(bodyFor("overview", CODE5)).toEqual({ stock_code: CODE5 })
   })
 
-  it("financial: { code }", () => {
-    expect(bodyFor("financial", CODE5)).toEqual({ code: CODE5 })
+  it("financial: { stock_code }", () => {
+    expect(bodyFor("financial", CODE5)).toEqual({ stock_code: CODE5 })
   })
 
   it("edinet: { stock_code } — code ではなく stock_code", () => {
@@ -61,18 +61,11 @@ describe("bodyFor: endpoint 毎の body schema regression", () => {
 })
 
 describe("bodyFor: stock_code / code の使い分けルール", () => {
-  const stockCodeEndpoints = ["disclosure", "news", "edinet"] as const
-  const codeEndpoints = ["overview", "financial"] as const
+  const stockCodeEndpoints = ["overview", "financial", "disclosure", "news", "edinet"] as const
 
   it.each(stockCodeEndpoints)("%s は stock_code を使う", (endpoint) => {
     const body = bodyFor(endpoint, CODE5) as Record<string, unknown>
     expect(body.stock_code).toBe(CODE5)
     expect(body.code).toBeUndefined()
-  })
-
-  it.each(codeEndpoints)("%s は code を使う", (endpoint) => {
-    const body = bodyFor(endpoint, CODE5) as Record<string, unknown>
-    expect(body.code).toBe(CODE5)
-    expect(body.stock_code).toBeUndefined()
   })
 })

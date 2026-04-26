@@ -12,6 +12,7 @@ import {
 import { join, dirname } from "node:path"
 import { homedir } from "node:os"
 import { fileURLToPath } from "node:url"
+import { spawnSync } from "node:child_process"
 
 const SKILL_NAMES = ["tc-discuss", "tc-research", "tc-research-idea"]
 
@@ -21,6 +22,22 @@ command = "tc"
 args = ["mcp"]
 env = { TICKERCODE_API_KEY = "$TICKERCODE_API_KEY" }
 `.trim()
+
+function upsertTomlSection(toml: string, sectionName: string, sectionBody: string): string {
+  const escaped = sectionName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  const re = new RegExp(`\\n?\\[${escaped}\\][\\s\\S]*?(?=\\n\\[|\\s*$)`)
+  const section = `[${sectionName}]\n${sectionBody.trim()}\n`
+  if (re.test(toml)) {
+    return toml.replace(re, `\n${section}`)
+  }
+  const sep =
+    toml && !toml.endsWith("\n\n")
+      ? toml.endsWith("\n")
+        ? "\n"
+        : "\n\n"
+      : ""
+  return toml + sep + section
+}
 
 function getSkillSourceRoot(): string {
   const here = dirname(fileURLToPath(import.meta.url))
@@ -34,6 +51,32 @@ function getSkillSourceRoot(): string {
   throw new Error(
     `skill source not found near ${here}. Expected .claude/skills/ adjacent to the CLI package.`,
   )
+}
+
+function getPluginMarketplaceRoot(kind: "claude-code" | "codex"): string {
+  const here = dirname(fileURLToPath(import.meta.url))
+  for (const candidate of [
+    join(here, "..", "..", "plugins", kind),
+    join(here, "..", "plugins", kind),
+    join(here, "..", "..", "..", "plugins", kind),
+  ]) {
+    if (existsSync(candidate)) return candidate
+  }
+  throw new Error(
+    `plugin marketplace root not found near ${here}. Expected plugins/${kind}/ adjacent to the CLI package.`,
+  )
+}
+
+function getSandboxMarketplaceRoot(name: "tc-claude-plugin" | "tc-codex-plugin"): string | undefined {
+  const here = dirname(fileURLToPath(import.meta.url))
+  for (const candidate of [
+    join(here, "..", "..", "..", "sandbox", name),
+    join(here, "..", "..", "sandbox", name),
+    join(here, "..", "sandbox", name),
+  ]) {
+    if (existsSync(candidate)) return candidate
+  }
+  return undefined
 }
 
 function copyDirRecursive(src: string, dst: string): number {
@@ -142,6 +185,50 @@ function upsertJsonMcpServer(
   return existed ? "updated" : "added"
 }
 
+function upsertCodexPluginConfig(
+  configPath: string,
+  marketplacePath: string,
+  force: boolean,
+): "updated" | "skipped" | "added" {
+  const configDir = dirname(configPath)
+  if (!existsSync(configDir)) mkdirSync(configDir, { recursive: true })
+  const existingToml = existsSync(configPath)
+    ? readFileSync(configPath, "utf8")
+    : ""
+  const hasMarketplace = existingToml.includes("[marketplaces.tickercode]")
+  const hasPlugin = existingToml.includes('[plugins."tickercode@tickercode"]')
+  if (hasMarketplace && hasPlugin && !force) return "skipped"
+
+  let nextToml = upsertTomlSection(
+    existingToml,
+    "marketplaces.tickercode",
+    `source_type = "local"\nsource = ${JSON.stringify(marketplacePath)}`,
+  )
+  nextToml = upsertTomlSection(
+    nextToml,
+    'plugins."tickercode@tickercode"',
+    "enabled = true",
+  )
+  writeFileSync(configPath, nextToml, "utf8")
+  return hasMarketplace || hasPlugin ? "updated" : "added"
+}
+
+function runLoggedCommand(command: string, args: string[]): void {
+  process.stdout.write(pc.dim(`  $ ${command} ${args.join(" ")}\n`))
+  const result = spawnSync(command, args, {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  })
+  if (result.stdout) process.stdout.write(result.stdout)
+  if (result.stderr) process.stderr.write(result.stderr)
+  if (result.error) {
+    throw result.error
+  }
+  if (result.status !== 0) {
+    throw new Error(`${command} ${args.join(" ")} failed with exit code ${result.status}`)
+  }
+}
+
 const codexCommand = defineCommand({
   meta: {
     name: "codex",
@@ -156,6 +243,15 @@ const codexCommand = defineCommand({
       type: "string",
       description: "Codex config TOML path (default: ~/.codex/config.toml)",
     },
+    plugin: {
+      type: "boolean",
+      description: "Register the local Codex plugin marketplace and enable tickercode@tickercode",
+      default: false,
+    },
+    "marketplace-path": {
+      type: "string",
+      description: "Codex plugin marketplace root (default: packaged plugins/codex)",
+    },
     force: {
       type: "boolean",
       description: "Overwrite existing [mcp_servers.tickercode] section",
@@ -169,8 +265,27 @@ const codexCommand = defineCommand({
     const configPath = args["config-path"]
       ? String(args["config-path"])
       : join(homedir(), ".codex", "config.toml")
+    const marketplacePath = args["marketplace-path"]
+      ? String(args["marketplace-path"])
+      : (getSandboxMarketplaceRoot("tc-codex-plugin") ?? getPluginMarketplaceRoot("codex"))
 
     process.stdout.write(pc.bold("Setting up tickercode for Codex CLI…\n"))
+
+    if (args.plugin) {
+      const action = upsertCodexPluginConfig(
+        configPath,
+        marketplacePath,
+        Boolean(args.force),
+      )
+      if (action === "skipped") {
+        process.stdout.write(
+          pc.dim(`  - ${configPath} に plugin marketplace 既存、skip（--force で上書き）\n`),
+        )
+      } else {
+        const verb = action === "updated" ? "の plugin marketplace を更新" : "に plugin marketplace を追記"
+        process.stdout.write(`  ${pc.green("✓")} ${configPath} ${verb}\n`)
+      }
+    }
 
     // 1. config.toml: append [mcp_servers.tickercode]
     const configDir = dirname(configPath)
@@ -185,7 +300,7 @@ const codexCommand = defineCommand({
       )
     } else if (hasSection && args.force) {
       const replaced = existingToml.replace(
-        /\[mcp_servers\.tickercode\][\s\S]*?(?=\n\[|\Z)/,
+        /\[mcp_servers\.tickercode\][\s\S]*?(?=\n\[|$)/,
         `${TOML_SECTION}\n`,
       )
       writeFileSync(configPath, replaced, "utf8")
@@ -304,12 +419,84 @@ const geminiCommand = defineCommand({
   },
 })
 
+const claudeCommand = defineCommand({
+  meta: {
+    name: "claude",
+    description: "Setup tickercode plugin for Claude Code",
+  },
+  args: {
+    "marketplace-path": {
+      type: "string",
+      description:
+        "Claude Code marketplace root (default: packaged plugins/claude-code)",
+    },
+    install: {
+      type: "boolean",
+      description: "Run Claude Code plugin marketplace add + plugin install",
+      default: false,
+    },
+    scope: {
+      type: "string",
+      description: "Claude Code plugin install scope: user, project, or local (default: user)",
+      default: "user",
+    },
+  },
+  async run({ args }) {
+    const marketplacePath = args["marketplace-path"]
+      ? String(args["marketplace-path"])
+      : (getSandboxMarketplaceRoot("tc-claude-plugin") ?? getPluginMarketplaceRoot("claude-code"))
+    const scope = String(args.scope ?? "user")
+
+    process.stdout.write(pc.bold("Setting up tickercode for Claude Code…\n"))
+    if (args.install) {
+      process.stdout.write(pc.dim("Installing via Claude Code plugin CLI.\n\n"))
+      runLoggedCommand("claude", ["plugin", "validate", marketplacePath])
+      runLoggedCommand("claude", [
+        "plugin",
+        "marketplace",
+        "add",
+        "--scope",
+        scope,
+        marketplacePath,
+      ])
+      runLoggedCommand("claude", [
+        "plugin",
+        "install",
+        "--scope",
+        scope,
+        "tickercode@tickercode",
+      ])
+      process.stdout.write(`\n${pc.bold("完了")}: tickercode@tickercode installed (${scope})\n`)
+      process.stdout.write(pc.dim("  - Claude Code を再起動、または /reload-plugins を実行\n"))
+      process.stdout.write(pc.dim("  - /mcp で plugin:tickercode:tickercode が Connected か確認\n"))
+      return
+    }
+
+    process.stdout.write(
+      pc.dim("Claude Code plugins are installed from inside Claude Code.\n\n"),
+    )
+    process.stdout.write("Run this command from a shell:\n\n")
+    process.stdout.write(`${pc.cyan(`tc setup claude --install --marketplace-path ${marketplacePath}`)}\n\n`)
+    process.stdout.write("Or run these commands in Claude Code:\n\n")
+    process.stdout.write(`${pc.cyan(`/plugin marketplace add ${marketplacePath}`)}\n`)
+    process.stdout.write(`${pc.cyan(`/plugin install tickercode@tickercode`)}\n`)
+    process.stdout.write(`${pc.cyan("/reload-plugins")}\n\n`)
+    process.stdout.write(pc.bold("After install:\n"))
+    process.stdout.write(pc.dim("  - tc auth login（未実行なら）で API key を設定\n"))
+    process.stdout.write(pc.dim("  - /mcp で tickercode が listed されるか確認\n"))
+    process.stdout.write(
+      pc.dim("  - 「6594 の投資観点を分析して」と打って動作確認\n"),
+    )
+  },
+})
+
 export const setupCommand = defineCommand({
   meta: {
     name: "setup",
-    description: "Setup tickercode for various CLI clients (codex / gemini)",
+    description: "Setup tickercode for various CLI clients (claude / codex / gemini)",
   },
   subCommands: {
+    claude: claudeCommand,
     codex: codexCommand,
     gemini: geminiCommand,
   },

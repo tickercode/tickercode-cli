@@ -1,0 +1,19 @@
+{
+  "name": "tickercode",
+  "metadata": {
+    "description": "TickerCode plugins for Japanese stock research with Claude Code."
+  },
+  "owner": {
+    "name": "TickerCode",
+    "email": "support@ticker-code.com"
+  },
+  "plugins": [
+    {
+      "name": "tickercode",
+      "description": "Japanese stock research skills and MCP tools powered by ticker-code.com.",
+      "category": "finance",
+      "source": "./plugins/tickercode",
+      "homepage": "https://ticker-code.com"
+    }
+  ]
+}

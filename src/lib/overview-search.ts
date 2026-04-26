@@ -182,7 +182,6 @@ export function searchOverview(
       }
     }
 
-    console.error('[debug] at matchMode check, normKws:', normKws, 'size:', matchedKeywords.size)
     if (matchMode === "all" && matchedKeywords.size !== normKws.length) {
       continue
     }

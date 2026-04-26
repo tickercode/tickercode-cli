@@ -16,6 +16,12 @@ import { researchIdeaTool } from "./research-idea"
 import { researchBatchTool } from "./research-batch"
 import { webSearchTool, webFetchTool, webRenderTool } from "./web-search"
 import { saveReportTool } from "./save-report"
+import { issuesListTool } from "./issues-list"
+import { issuesCreateTool } from "./issues-create"
+import { issuesGetTool } from "./issues-get"
+import { issuesPostMessageTool } from "./issues-post-message"
+import { issuesUpdateTool } from "./issues-update"
+import { issuesResolveTool } from "./issues-resolve"
 
 export const tools = [
   getStockTool,
@@ -39,4 +45,10 @@ export const tools = [
   webFetchTool,
   webRenderTool,
   saveReportTool,
+  issuesListTool,
+  issuesCreateTool,
+  issuesGetTool,
+  issuesPostMessageTool,
+  issuesUpdateTool,
+  issuesResolveTool,
 ]

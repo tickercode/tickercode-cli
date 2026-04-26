@@ -11,6 +11,8 @@
   "files": [
     "dist",
     ".claude/skills",
+    "plugins",
+    "scripts",
     "README.md",
     "LICENSE"
   ],
@@ -19,6 +21,8 @@
     "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest",
+    "sync:plugins": "node scripts/sync-plugin-skills.mjs",
+    "sync:plugin-sandbox": "bun run sync:plugins && node scripts/sync-plugin-sandbox.mjs",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "bun run build && bun run typecheck"
   },
