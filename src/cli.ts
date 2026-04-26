@@ -1,4 +1,5 @@
 import { defineCommand, runMain } from "citty"
+import pkg from "../package.json" with { type: "json" }
 import { stockCommand } from "./commands/stock"
 import { financialCommand } from "./commands/financial"
 import { mcpCommand } from "./commands/mcp"
@@ -14,7 +15,7 @@ import { authCommand } from "./commands/auth"
 import { issuesCommand } from "./commands/issues/index"
 import { setupCommand } from "./commands/setup"
 
-const VERSION = "0.0.1"
+const VERSION = pkg.version
 
 const main = defineCommand({
   meta: {

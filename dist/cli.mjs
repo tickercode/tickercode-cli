@@ -3,6 +3,76 @@
 // src/cli.ts
 import { defineCommand as defineCommand20, runMain } from "citty";
 
+// package.json
+var package_default = {
+  name: "@tickercode/cli",
+  version: "0.1.1",
+  description: "Command-line interface for ticker-code.com \u2014 Japanese stock analysis for humans and agents",
+  type: "module",
+  bin: {
+    tc: "./dist/cli.mjs"
+  },
+  main: "./dist/cli.cjs",
+  module: "./dist/cli.mjs",
+  files: [
+    "dist",
+    ".claude/skills",
+    "plugins",
+    "README.md",
+    "LICENSE"
+  ],
+  scripts: {
+    dev: "bun run src/cli.ts",
+    build: "tsup",
+    test: "vitest run",
+    "test:watch": "vitest",
+    "sync:plugins": "node scripts/sync-plugin-skills.mjs",
+    "sync:plugin-sandbox": "bun run sync:plugins && node scripts/sync-plugin-sandbox.mjs",
+    typecheck: "tsc --noEmit",
+    prepublishOnly: "bun run build && bun run typecheck"
+  },
+  dependencies: {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    citty: "^0.1.6",
+    "cli-table3": "^0.6.5",
+    picocolors: "^1.1.1",
+    yaml: "^2.8.3",
+    zod: "^4.3.6"
+  },
+  devDependencies: {
+    "@types/node": "^22.10.0",
+    tsup: "^8.3.5",
+    typescript: "^5.7.0",
+    vitest: "^2.1.8"
+  },
+  engines: {
+    node: ">=20"
+  },
+  publishConfig: {
+    access: "public"
+  },
+  keywords: [
+    "tickercode",
+    "ticker-code",
+    "stock",
+    "japan",
+    "jpx",
+    "cli",
+    "claude",
+    "mcp",
+    "finance"
+  ],
+  license: "MIT",
+  repository: {
+    type: "git",
+    url: "git+https://github.com/tickercode/tickercode-cli.git"
+  },
+  bugs: {
+    url: "https://github.com/tickercode/tickercode-cli/issues"
+  },
+  homepage: "https://ticker-code.com"
+};
+
 // src/commands/stock.ts
 import { defineCommand } from "citty";
 
@@ -5927,7 +5997,7 @@ var setupCommand = defineCommand19({
 });
 
 // src/cli.ts
-var VERSION = "0.0.1";
+var VERSION = package_default.version;
 var main = defineCommand20({
   meta: {
     name: "tc",
