@@ -6,7 +6,7 @@ import { defineCommand as defineCommand20, runMain } from "citty";
 // package.json
 var package_default = {
   name: "@tickercode/cli",
-  version: "0.2.1",
+  version: "0.3.0",
   description: "Command-line interface for ticker-code.com \u2014 Japanese stock analysis for humans and agents",
   type: "module",
   bin: {
@@ -4000,12 +4000,25 @@ var rankCommand = defineCommand6({
 import { defineCommand as defineCommand7 } from "citty";
 import pc5 from "picocolors";
 var VALID_DOC_TYPES = [
+  // 既存 6 種 (業績・配当系)
   "earnings",
   "forecast",
   "dividend",
   "buyback",
   "presentation",
   "plan",
+  // 新 10 種 (2026-04-26 追加)
+  "ma",
+  "monthly",
+  "tob",
+  "large_shareholder",
+  "split",
+  "bond",
+  "stock_option",
+  "trouble",
+  "personnel",
+  "contract",
+  // 最後の網
   "tdnet_other"
 ];
 function parseIntOr(v, fallback) {

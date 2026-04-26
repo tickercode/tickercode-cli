@@ -8,14 +8,27 @@ import { VALID_DOC_TYPES } from "../src/commands/disclosures"
  * 参照: .tickercode/issues/cli-disclosures-command/issue.md
  */
 describe("VALID_DOC_TYPES (canonical doc type set)", () => {
-  it("依頼書 Phase 1 仕様の 7 種別を含む", () => {
+  it("Phase 1 既存 6 種 + 2026-04-26 追加 10 種 + tdnet_other = 17 種", () => {
     expect(VALID_DOC_TYPES).toEqual([
+      // 既存 6 種 (業績・配当系)
       "earnings",
       "forecast",
       "dividend",
       "buyback",
       "presentation",
       "plan",
+      // 新 10 種 (analyst Team 依頼で追加)
+      "ma",
+      "monthly",
+      "tob",
+      "large_shareholder",
+      "split",
+      "bond",
+      "stock_option",
+      "trouble",
+      "personnel",
+      "contract",
+      // 最後の網
       "tdnet_other",
     ])
   })

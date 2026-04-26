@@ -3,13 +3,28 @@ import pc from "picocolors"
 import { postJson } from "../lib/api-client"
 import { unwrap } from "../lib/format"
 
+// BE 側 CANONICAL_DOC_TYPES と完全同期 (BE: src/modules/disclosure/repository/disclosure-repository.ts)
+// 2026-04-26 拡張: 新 10 種を analyst Team 依頼で追加
 export const VALID_DOC_TYPES = [
+  // 既存 6 種 (業績・配当系)
   "earnings",
   "forecast",
   "dividend",
   "buyback",
   "presentation",
   "plan",
+  // 新 10 種 (2026-04-26 追加)
+  "ma",
+  "monthly",
+  "tob",
+  "large_shareholder",
+  "split",
+  "bond",
+  "stock_option",
+  "trouble",
+  "personnel",
+  "contract",
+  // 最後の網
   "tdnet_other",
 ] as const
 
