@@ -33,7 +33,7 @@ var import_citty20 = require("citty");
 // package.json
 var package_default = {
   name: "@tickercode/cli",
-  version: "0.1.1",
+  version: "0.1.2",
   description: "Command-line interface for ticker-code.com \u2014 Japanese stock analysis for humans and agents",
   type: "module",
   bin: {
@@ -4053,6 +4053,10 @@ var disclosuresCommand = (0, import_citty7.defineCommand)({
       type: "string",
       description: `Filter by canonical doc type (${VALID_DOC_TYPES.join(" | ")})`
     },
+    code: {
+      type: "string",
+      description: "Filter by ticker code (4 or 5 digits, e.g. 7203 or 72030)"
+    },
     format: {
       type: "string",
       description: "Output format (Phase 1: json only)",
@@ -4065,7 +4069,13 @@ var disclosuresCommand = (0, import_citty7.defineCommand)({
     const rawLimit = parseIntOr(args.limit, 100);
     const limit = rawLimit === 0 ? 500 : Math.max(1, Math.min(rawLimit, 500));
     const docType = args["doc-type"] ? String(args["doc-type"]) : void 0;
+    const code = args.code ? String(args.code).trim() : void 0;
     const format = String(args.format);
+    if (code && !/^\d{4,5}$/.test(code)) {
+      process.stderr.write(import_picocolors5.default.red(`Invalid --code: ${code} (expected 4 or 5 digits)
+`));
+      process.exit(1);
+    }
     if (docType && !VALID_DOC_TYPES.includes(docType)) {
       process.stderr.write(import_picocolors5.default.red(`Invalid --doc-type: ${docType}
 `));
@@ -4084,6 +4094,7 @@ var disclosuresCommand = (0, import_citty7.defineCommand)({
     }
     const body = { days, limit };
     if (docType) body.doc_types = [docType];
+    if (code) body.code = code;
     const res = await postJson("/api/disclosure/search", body);
     const data = unwrap(res);
     const items = data?.items ?? [];

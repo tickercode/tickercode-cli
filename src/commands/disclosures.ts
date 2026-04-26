@@ -46,6 +46,10 @@ export const disclosuresCommand = defineCommand({
       type: "string",
       description: `Filter by canonical doc type (${VALID_DOC_TYPES.join(" | ")})`,
     },
+    code: {
+      type: "string",
+      description: "Filter by ticker code (4 or 5 digits, e.g. 7203 or 72030)",
+    },
     format: {
       type: "string",
       description: "Output format (Phase 1: json only)",
@@ -58,7 +62,13 @@ export const disclosuresCommand = defineCommand({
     const rawLimit = parseIntOr(args.limit, 100)
     const limit = rawLimit === 0 ? 500 : Math.max(1, Math.min(rawLimit, 500))
     const docType = args["doc-type"] ? String(args["doc-type"]) : undefined
+    const code = args.code ? String(args.code).trim() : undefined
     const format = String(args.format)
+
+    if (code && !/^\d{4,5}$/.test(code)) {
+      process.stderr.write(pc.red(`Invalid --code: ${code} (expected 4 or 5 digits)\n`))
+      process.exit(1)
+    }
 
     if (docType && !(VALID_DOC_TYPES as readonly string[]).includes(docType)) {
       process.stderr.write(pc.red(`Invalid --doc-type: ${docType}\n`))
@@ -77,6 +87,7 @@ export const disclosuresCommand = defineCommand({
 
     const body: Record<string, unknown> = { days, limit }
     if (docType) body.doc_types = [docType]
+    if (code) body.code = code
 
     const res = await postJson<unknown>("/api/disclosure/search", body)
     const data = unwrap(res) as SearchResponse | null
