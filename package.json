@@ -1,6 +1,6 @@
 {
   "name": "@tickercode/cli",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Command-line interface for ticker-code.com — Japanese stock analysis for humans and agents",
   "type": "module",
   "bin": {
@@ -12,7 +12,6 @@
     "dist",
     ".claude/skills",
     "plugins",
-    "scripts",
     "README.md",
     "LICENSE"
   ],
@@ -60,10 +59,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tickercode/cli.git"
+    "url": "git+https://github.com/tickercode/tickercode-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/tickercode/cli/issues"
+    "url": "https://github.com/tickercode/tickercode-cli/issues"
   },
   "homepage": "https://ticker-code.com"
 }

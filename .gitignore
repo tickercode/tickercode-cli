@@ -1,5 +1,4 @@
 node_modules
-dist
 *.log
 .DS_Store
 .env
@@ -17,3 +16,7 @@ research/**/*
 !research/README.md
 !research/samples/**
 .playwright-mcp/
+
+# Public 化前に untrack した内部 issue / 個人 PII 含む配信物
+.tickercode/
+published.yaml

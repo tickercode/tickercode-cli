@@ -2,11 +2,23 @@
 
 日本株分析 CLI。ticker-code.com のデータを人間と Agent（Claude / MCP）から同じ形で引ける。
 
+## インストール
+
+GitHub から直接グローバルインストール（Public βリリース、認証不要）:
+
 ```bash
-npm i -g @tickercode/cli
+npm install -g github:tickercode/tickercode-cli
+# または特定の version を pin
+npm install -g github:tickercode/tickercode-cli#v0.1.0
+```
+
+```bash
 tc stock "2418"
 tc financial "2418"
+tc disclosures --days 7 --doc-type forecast --format json
 ```
+
+将来 npm public registry にも公開予定（`npm install -g @tickercode/cli`）。
 
 ## 概要
 
@@ -217,4 +229,4 @@ bun run test                  # vitest
 
 ## ライセンス
 
-MIT（Phase 3 で公開時）
+MIT — see [LICENSE](./LICENSE).
