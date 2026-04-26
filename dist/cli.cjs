@@ -33,7 +33,7 @@ var import_citty20 = require("citty");
 // package.json
 var package_default = {
   name: "@tickercode/cli",
-  version: "0.3.0",
+  version: "0.3.1",
   description: "Command-line interface for ticker-code.com \u2014 Japanese stock analysis for humans and agents",
   type: "module",
   bin: {
