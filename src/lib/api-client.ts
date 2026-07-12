@@ -7,7 +7,11 @@ export function getApiBase(): string {
 }
 
 export function getAuthHeaders(): Record<string, string> {
-  // Priority: env var (CI override) > credentials file > none
+  // Issue Tracker 用: TC_ISSUE_TOKEN_AGENT を優先
+  const issueToken = process.env.TC_ISSUE_TOKEN_AGENT ?? process.env.TC_ISSUE_TOKEN_CLI
+  if (issueToken) return { Authorization: `Bearer ${issueToken}` }
+
+  // 通常の API 用: 環境変数 > credentials ファイル
   const envKey = process.env.TICKERCODE_API_KEY
   if (envKey) return { Authorization: `Bearer ${envKey}` }
   const cred = loadCredentials()

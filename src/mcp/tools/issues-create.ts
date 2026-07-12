@@ -69,7 +69,7 @@ export const issuesCreateTool = {
     if (input.labels !== undefined) payload.labels = input.labels
     if (input.actor_id !== undefined) payload.actor_id = input.actor_id
 
-    const url = `${getApiBase()}/issues/create`
+    const url = `${getApiBase()}/api/issues/create`
     try {
       const res = await fetch(url, {
         method: "POST",

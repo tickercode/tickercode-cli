@@ -1,5 +1,15 @@
 import { getApiBase, getAuthHeaders } from "./api-client"
 
+function getIssueHeaders(): Record<string, string> {
+  const token = process.env.TC_ISSUE_TOKEN_AGENT ?? process.env.TC_ISSUE_TOKEN_CLI
+  if (token) return { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+  return { "Content-Type": "application/json", ...getAuthHeaders() }
+}
+
+function getActor(): string {
+  return process.env.TC_ISSUE_ACTOR_ID ?? "system:tc-cli"
+}
+
 export interface Issue {
   id: number
   title: string
@@ -55,16 +65,15 @@ export function parseTcId(s: string): number | null {
   return Number.isNaN(n) ? null : n
 }
 
-async function post<T = unknown>(path: string, body: unknown): Promise<T> {
+async function post<T = unknown>(path: string, body: Record<string, unknown>): Promise<T> {
   const url = `${getApiBase()}${path}`
+  // actor_id を常に付与（AGENT token 経路で author 特定に必要）
+  if (!body.actor_id) body.actor_id = getActor()
   let res: Response
   try {
     res = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...getAuthHeaders(),
-      },
+      headers: getIssueHeaders(),
       body: JSON.stringify(body),
     })
   } catch (err) {
@@ -86,13 +95,13 @@ export async function listIssues(opts: ListIssuesOptions): Promise<Issue[]> {
   if (opts.source !== undefined) body.source = opts.source
   if (opts.updatedSince !== undefined) body.updated_since = opts.updatedSince
 
-  const res = await post<{ success: boolean; data: { items: Issue[] } }>("/issues/list", body)
-  return res.data?.items ?? []
+  const res = await post<{ success: boolean; data: { issues: Issue[] } }>("/api/issues/list", body)
+  return res.data?.issues ?? []
 }
 
 export async function getIssue(id: number): Promise<{ issue: Issue; messages: IssueMessage[] }> {
   const res = await post<{ success: boolean; data: { issue: Issue; messages: IssueMessage[] } }>(
-    "/issues/get",
+    "/api/issues/get",
     { id },
   )
   return res.data
@@ -106,7 +115,7 @@ export async function createIssue(opts: CreateIssueOptions): Promise<string> {
   if (opts.labels !== undefined) body.labels = opts.labels
   if (opts.actorId !== undefined) body.actor_id = opts.actorId
 
-  const res = await post<{ success: boolean; data: { id: number } }>("/issues/create", body)
+  const res = await post<{ success: boolean; data: { id: number } }>("/api/issues/create", body)
   return formatTcId(res.data.id)
 }
 
@@ -118,14 +127,14 @@ export async function postMessage(
   const payload: Record<string, unknown> = { issue_id: issueId, body }
   if (meta !== undefined) payload.meta = meta
 
-  const res = await post<{ success: boolean; data: { id: number } }>("/issues/post-message", payload)
+  const res = await post<{ success: boolean; data: { id: number } }>("/api/issues/post-message", payload)
   return res.data.id
 }
 
 export async function updateIssue(id: number, patch: UpdateIssuePatch): Promise<void> {
-  await post("/issues/update", { id, ...patch })
+  await post("/api/issues/update", { id, ...patch })
 }
 
 export async function resolveIssue(id: number): Promise<void> {
-  await post("/issues/resolve", { id })
+  await post("/api/issues/resolve", { id })
 }

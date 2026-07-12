@@ -27,7 +27,7 @@ export const issuesResolveTool = {
     },
   },
   async handler(input: { id: number }) {
-    const url = `${getApiBase()}/issues/resolve`
+    const url = `${getApiBase()}/api/issues/resolve`
     try {
       const res = await fetch(url, {
         method: "POST",

@@ -63,7 +63,7 @@ describe("listIssues", () => {
 
     expect(mockFetch).toHaveBeenCalledOnce()
     const [url, opts] = mockFetch.mock.calls[0] as [string, RequestInit]
-    expect(url).toBe("https://api.ticker-code.com/issues/list")
+    expect(url).toBe("https://api.ticker-code.com/api/issues/list")
     expect(opts.method).toBe("POST")
   })
 
@@ -93,7 +93,7 @@ describe("listIssues", () => {
 
   it("returns items from API response", async () => {
     const items = [{ id: 1, title: "Test Issue", status: "open" }]
-    mockFetch.mockResolvedValueOnce(makeOkResponse({ success: true, data: { items } }))
+    mockFetch.mockResolvedValueOnce(makeOkResponse({ success: true, data: { issues: items } }))
 
     const { listIssues } = await import("../../src/lib/issues-client")
     const result = await listIssues({})
