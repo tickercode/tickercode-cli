@@ -1,3 +1,12 @@
+# Archived: moved to monorepo
+
+This repository has moved to `tickercode/tickercode`.
+
+Current path: `packages/cli`
+New repository: https://github.com/tickercode/tickercode
+
+This repository is kept for history only. Do not use it for new development or releases.
+
 # @tickercode/cli
 
 日本株分析 CLI。ticker-code.com のデータを人間と Agent（Claude / MCP）から同じ形で引ける。
