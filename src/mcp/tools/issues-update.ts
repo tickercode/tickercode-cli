@@ -57,7 +57,7 @@ export const issuesUpdateTool = {
     labels?: string[]
   }) {
     const { id, ...patch } = input
-    const url = `${getApiBase()}/issues/update`
+    const url = `${getApiBase()}/api/issues/update`
     try {
       const res = await fetch(url, {
         method: "POST",

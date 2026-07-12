@@ -17,6 +17,30 @@ import { setupCommand } from "./commands/setup"
 
 const VERSION = pkg.version
 
+// エラーテレメトリ: 未捕捉例外を Issue Tracker に自動送信
+const _issueToken = process.env.TC_ISSUE_TOKEN_AGENT ?? process.env.TC_ISSUE_TOKEN_CLI
+if (_issueToken) {
+  const _issueEndpoint = process.env.TC_ISSUES_API_URL ?? "https://api.ticker-code.com/api"
+  const _sendError = (err: Error) => {
+    fetch(`${_issueEndpoint}/api/issues/create`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${_issueToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: err.message || "Unhandled error",
+        source: "cli",
+        actor_id: "system:tc-cli",
+        context: { stack: err.stack?.slice(0, 2000) },
+      }),
+      signal: AbortSignal.timeout(3000),
+    }).catch(() => {}) // fire-and-forget
+  }
+  process.on("uncaughtException", (err) => { console.error(err); _sendError(err) })
+  process.on("unhandledRejection", (reason) => {
+    const err = reason instanceof Error ? reason : new Error(String(reason))
+    console.error(err); _sendError(err)
+  })
+}
+
 const main = defineCommand({
   meta: {
     name: "tc",

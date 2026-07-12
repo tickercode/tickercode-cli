@@ -41,7 +41,7 @@ export const issuesPostMessageTool = {
     const payload: Record<string, unknown> = { issue_id: input.issue_id, body: input.body }
     if (input.meta !== undefined) payload.meta = input.meta
 
-    const url = `${getApiBase()}/issues/post-message`
+    const url = `${getApiBase()}/api/issues/post-message`
     try {
       const res = await fetch(url, {
         method: "POST",

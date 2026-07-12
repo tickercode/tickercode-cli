@@ -118,6 +118,8 @@ function getApiBase() {
   return process.env.TICKERCODE_API_BASE ?? DEFAULT_API_BASE;
 }
 function getAuthHeaders() {
+  const issueToken = process.env.TC_ISSUE_TOKEN_AGENT ?? process.env.TC_ISSUE_TOKEN_CLI;
+  if (issueToken) return { Authorization: `Bearer ${issueToken}` };
   const envKey = process.env.TICKERCODE_API_KEY;
   if (envKey) return { Authorization: `Bearer ${envKey}` };
   const cred = loadCredentials();
@@ -3166,7 +3168,7 @@ var issuesListTool = {
     if (input.status !== void 0) body.status = input.status;
     if (input.source !== void 0) body.source = input.source;
     if (input.updated_since !== void 0) body.updated_since = input.updated_since;
-    const url = `${getApiBase()}/issues/list`;
+    const url = `${getApiBase()}/api/issues/list`;
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -3175,7 +3177,7 @@ var issuesListTool = {
       });
       const json = await res.json();
       return {
-        content: [{ type: "text", text: JSON.stringify(json.data?.items ?? [], null, 2) }]
+        content: [{ type: "text", text: JSON.stringify(json.data?.issues ?? [], null, 2) }]
       };
     } catch (err) {
       return {
@@ -3190,6 +3192,14 @@ var issuesListTool = {
 import { z as z20 } from "zod";
 
 // src/lib/issues-client.ts
+function getIssueHeaders() {
+  const token = process.env.TC_ISSUE_TOKEN_AGENT ?? process.env.TC_ISSUE_TOKEN_CLI;
+  if (token) return { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+  return { "Content-Type": "application/json", ...getAuthHeaders() };
+}
+function getActor() {
+  return process.env.TC_ISSUE_ACTOR_ID ?? "system:tc-cli";
+}
 function formatTcId(n3) {
   return `TC-${n3}`;
 }
@@ -3201,14 +3211,12 @@ function parseTcId(s) {
 }
 async function post(path, body) {
   const url = `${getApiBase()}${path}`;
+  if (!body.actor_id) body.actor_id = getActor();
   let res;
   try {
     res = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...getAuthHeaders()
-      },
+      headers: getIssueHeaders(),
       body: JSON.stringify(body)
     });
   } catch (err) {
@@ -3227,12 +3235,12 @@ async function listIssues(opts) {
   if (opts.status !== void 0) body.status = opts.status;
   if (opts.source !== void 0) body.source = opts.source;
   if (opts.updatedSince !== void 0) body.updated_since = opts.updatedSince;
-  const res = await post("/issues/list", body);
-  return res.data?.items ?? [];
+  const res = await post("/api/issues/list", body);
+  return res.data?.issues ?? [];
 }
 async function getIssue(id) {
   const res = await post(
-    "/issues/get",
+    "/api/issues/get",
     { id }
   );
   return res.data;
@@ -3244,17 +3252,17 @@ async function createIssue(opts) {
   if (opts.priority !== void 0) body.priority = opts.priority;
   if (opts.labels !== void 0) body.labels = opts.labels;
   if (opts.actorId !== void 0) body.actor_id = opts.actorId;
-  const res = await post("/issues/create", body);
+  const res = await post("/api/issues/create", body);
   return formatTcId(res.data.id);
 }
 async function postMessage(issueId, body, meta) {
   const payload = { issue_id: issueId, body };
   if (meta !== void 0) payload.meta = meta;
-  const res = await post("/issues/post-message", payload);
+  const res = await post("/api/issues/post-message", payload);
   return res.data.id;
 }
 async function resolveIssue(id) {
-  await post("/issues/resolve", { id });
+  await post("/api/issues/resolve", { id });
 }
 
 // src/mcp/tools/issues-create.ts
@@ -3315,7 +3323,7 @@ var issuesCreateTool = {
     if (input.priority !== void 0) payload.priority = input.priority;
     if (input.labels !== void 0) payload.labels = input.labels;
     if (input.actor_id !== void 0) payload.actor_id = input.actor_id;
-    const url = `${getApiBase()}/issues/create`;
+    const url = `${getApiBase()}/api/issues/create`;
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -3362,7 +3370,7 @@ var issuesGetTool = {
     }
   },
   async handler(input) {
-    const url = `${getApiBase()}/issues/get`;
+    const url = `${getApiBase()}/api/issues/get`;
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -3421,7 +3429,7 @@ var issuesPostMessageTool = {
   async handler(input) {
     const payload = { issue_id: input.issue_id, body: input.body };
     if (input.meta !== void 0) payload.meta = input.meta;
-    const url = `${getApiBase()}/issues/post-message`;
+    const url = `${getApiBase()}/api/issues/post-message`;
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -3491,7 +3499,7 @@ var issuesUpdateTool = {
   },
   async handler(input) {
     const { id, ...patch } = input;
-    const url = `${getApiBase()}/issues/update`;
+    const url = `${getApiBase()}/api/issues/update`;
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -3537,7 +3545,7 @@ var issuesResolveTool = {
     }
   },
   async handler(input) {
-    const url = `${getApiBase()}/issues/resolve`;
+    const url = `${getApiBase()}/api/issues/resolve`;
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -6053,6 +6061,33 @@ var setupCommand = defineCommand19({
 
 // src/cli.ts
 var VERSION = package_default.version;
+var _issueToken = process.env.TC_ISSUE_TOKEN_AGENT ?? process.env.TC_ISSUE_TOKEN_CLI;
+if (_issueToken) {
+  const _issueEndpoint = process.env.TC_ISSUES_API_URL ?? "https://api.ticker-code.com/api";
+  const _sendError = (err) => {
+    fetch(`${_issueEndpoint}/api/issues/create`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${_issueToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: err.message || "Unhandled error",
+        source: "cli",
+        actor_id: "system:tc-cli",
+        context: { stack: err.stack?.slice(0, 2e3) }
+      }),
+      signal: AbortSignal.timeout(3e3)
+    }).catch(() => {
+    });
+  };
+  process.on("uncaughtException", (err) => {
+    console.error(err);
+    _sendError(err);
+  });
+  process.on("unhandledRejection", (reason) => {
+    const err = reason instanceof Error ? reason : new Error(String(reason));
+    console.error(err);
+    _sendError(err);
+  });
+}
 var main = defineCommand20({
   meta: {
     name: "tc",

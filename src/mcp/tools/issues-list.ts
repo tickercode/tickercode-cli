@@ -53,16 +53,16 @@ export const issuesListTool = {
     if (input.source !== undefined) body.source = input.source
     if (input.updated_since !== undefined) body.updated_since = input.updated_since
 
-    const url = `${getApiBase()}/issues/list`
+    const url = `${getApiBase()}/api/issues/list`
     try {
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json", ...getAuthHeaders() },
         body: JSON.stringify(body),
       })
-      const json = (await res.json()) as { success: boolean; data: { items: unknown[] } }
+      const json = (await res.json()) as { success: boolean; data: { issues: unknown[] } }
       return {
-        content: [{ type: "text" as const, text: JSON.stringify(json.data?.items ?? [], null, 2) }],
+        content: [{ type: "text" as const, text: JSON.stringify(json.data?.issues ?? [], null, 2) }],
       }
     } catch (err) {
       return {
